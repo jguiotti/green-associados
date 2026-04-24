@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Green Associados | Traduções Técnicas de Alta Performance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#3e4945",
+              "inverse-primary": "#7fd7bd",
+              "secondary": "#006b57",
+              "surface-container-highest": "#e5e2e0",
+              "secondary-fixed-dim": "#00e0b8",
+              "surface": "#fcf9f7",
+              "on-primary-container": "#99f2d7",
+              "on-secondary-fixed-variant": "#005141",
+              "surface-bright": "#fcf9f7",
+              "tertiary-container": "#9b4e29",
+              "inverse-surface": "#31302f",
+              "primary": "#005646",
+              "on-secondary": "#ffffff",
+              "on-background": "#1b1c1b",
+              "on-primary": "#ffffff",
+              "tertiary": "#7d3714",
+              "surface-container-high": "#eae8e6",
+              "on-tertiary-container": "#ffd9c9",
+              "on-tertiary": "#ffffff",
+              "surface-dim": "#dcd9d8",
+              "secondary-fixed": "#42fdd3",
+              "secondary-container": "#3dfad0",
+              "surface-tint": "#006b57",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-fixed-dim": "#ffb596",
+              "inverse-on-surface": "#f3f0ee",
+              "on-error": "#ffffff",
+              "error-container": "#ffdad6",
+              "surface-container-low": "#f6f3f1",
+              "on-error-container": "#93000a",
+              "on-primary-fixed-variant": "#005141",
+              "background": "#fcf9f7",
+              "on-secondary-container": "#00705b",
+              "on-primary-fixed": "#002019",
+              "tertiary-fixed": "#ffdbcd",
+              "on-secondary-fixed": "#002019",
+              "on-tertiary-fixed-variant": "#76320f",
+              "surface-variant": "#e5e2e0",
+              "on-surface": "#1b1c1b",
+              "surface-container": "#f0edeb",
+              "outline-variant": "#bdc9c4",
+              "on-tertiary-fixed": "#360f00",
+              "outline": "#6e7a75",
+              "primary-fixed-dim": "#7fd7bd",
+              "primary-container": "#00715C",
+              "primary-fixed": "#9bf3d9",
+              "error": "#ba1a1a"
+            },
+            fontFamily: {
+              "headline": ["Manrope", "sans-serif"],
+              "body": ["Manrope", "sans-serif"],
+              "label": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-nav {
+        backdrop-filter: blur(12px);
+        background-color: rgba(252, 249, 247, 0.8);
+      }
+      .editorial-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 2rem;
+      }
+      .team-photo-bw {
+        filter: grayscale(100%);
+        transition: filter 0.4s ease;
+      }
+      .team-photo-bw:hover {
+        filter: grayscale(0%);
+      }
+    </style>
+</head><body class="bg-background text-on-surface font-body selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 border-b border-stone-200/50 glass-nav">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<img alt="Green Associados Logo" class="h-10 h-12 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0ujuKqVR8-VztFhSDnucZCrXz8la6-_GLId2oRwes0lUU6P63s13Ae2rYbvoLRo3a2YmVcBTQhvqKjpEpksQQFWWfsMxBCrxsR07FHkx5zm_7AN1hfcnTVlCUTo_nkDMqtEytGEEpGzyZhKHXfxlQvW1WtWBTjL8L_BeSVZPjEKnAUhRs7JWZByJV6QFMIOARqpvgAKWuZ6y2FnwXsj_m1HOG48ORLrHtnb8SomT3HOCQbHlsfMim3rN5pdYPaPsDmk1mhwZMT24lCU" style=""/>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-medium text-stone-600 hover:text-teal-600 transition-colors text-sm tracking-tight" href="#atuacao" style="">ÁREAS DE ATUAÇÃO</a>
+<a class="font-medium text-stone-600 hover:text-teal-600 transition-colors text-sm tracking-tight" href="#ia" style="">INTELIGÊNCIA ARTIFICIAL</a>
+<a class="font-medium text-stone-600 hover:text-teal-600 transition-colors text-sm tracking-tight" href="#seguranca" style="">SEGURANÇA</a>
+<a class="font-medium text-stone-600 hover:text-teal-600 transition-colors text-sm tracking-tight" href="#equipe" style="">NOSSA EQUIPE</a>
+<a class="font-medium text-stone-600 hover:text-teal-600 transition-colors text-sm tracking-tight" href="#contato" style="">CONTATO</a>
+</div>
+<div class="flex items-center gap-4 text-xs font-bold text-emerald-900 opacity-60">
+<span class="" style="">PT | EN</span>
+</div>
+</div>
+</nav>
+<!-- Hero Banner -->
+<section class="relative min-h-[870px] flex items-center pt-20 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uhaZlSafcU11hflbYOHwYTuyCqzobvu02gg8epWWW0aohsDwJjIdl41bmM5xs6Oog4uaB3WBUfAlVAJ2GDZb-k8Rdhx8aCdBhjNr-vTumrVrYsaw-vEstAlhAy52DcC4hpUKOMWmzYFKVR1RLF6iAp5MQXrXPs674l4R5WvJKoYO3zrOhPoKttVT-5OSfl87b8nzXe6avd_Ni38seHoNy7oPYMLRRyUzXyYAmqfPcElkJwptyoY1-o6mRLuUwoAE5UD13o3heNz2bA" style=""/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/60 to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-8 w-full">
+<div class="max-w-3xl">
+<span class="inline-block px-4 py-1 mb-6 bg-secondary-fixed/20 text-secondary-fixed text-xs font-bold tracking-[0.2em] uppercase rounded-full" style="">Traduções Corporativas de Elite</span>
+<h1 class="text-white text-4xl md:text-5xl lg:text-6xl font-headline font-bold leading-[1.1] mb-8 tracking-tight" style="">
+                    Assim como você, nós também percorremos um longo caminho para chegar aonde estamos.
+                </h1>
+<p class="text-surface-container-low text-lg md:text-xl font-light leading-relaxed mb-10 max-w-2xl opacity-90" style="">
+                    Criada por associados com mais de 20 anos de atuação em traduções financeiras e corporativas para as principais companhias brasileiras, a Green Associados possui a experiência e o conhecimento necessários para que a sua mensagem seja interpretada corretamente em qualquer parte do mundo.
+                </p>
+<div class="flex flex-wrap gap-4">
+<a class="px-8 py-4 bg-secondary-fixed text-on-secondary-fixed font-bold rounded-md hover:shadow-lg hover:shadow-secondary-fixed/20 transition-all active:scale-95" href="#contato" style="">Fale Conosco</a>
+<a class="px-8 py-4 bg-white/10 backdrop-blur-md text-white border border-white/20 font-bold rounded-md hover:bg-white/20 transition-all active:scale-95" href="#atuacao" style="">Nossos Serviços</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Highlights -->
+<section class="relative z-20 -mt-20 max-w-7xl mx-auto px-8">
+<div class="grid md:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-10 shadow-xl shadow-primary/5 group border-b-4 border-secondary-fixed">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-4xl mb-6" style="">translate</span>
+<h3 class="text-xl font-bold text-primary mb-4 tracking-tight" style="">ÁREAS DE ATUAÇÃO</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6" style="">
+                    Prestamos serviços especializados de tradução, revisão e também de pós-edição de conteúdos traduzidos por IA, para as mais diversas áreas, nos idiomas português, inglês e espanhol.
+                </p>
+<a class="text-secondary font-bold text-xs tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all uppercase" href="#atuacao" style="">
+                    Saiba mais aqui <span class="material-symbols-outlined text-sm" style="">arrow_forward</span>
+</a>
+</div>
+<!-- Card 2 -->
+<div class="bg-primary p-10 shadow-xl shadow-primary/10 group">
+<span class="material-symbols-outlined text-secondary-container text-4xl mb-6" style="">groups</span>
+<h3 class="text-xl font-bold text-white mb-4 tracking-tight" style="">NOSSA EQUIPE</h3>
+<p class="text-on-primary-container text-sm leading-relaxed mb-6" style="">
+                    Somos especialistas no mercado financeiro e de negócios, com mais de 20 anos de experiência.
+                </p>
+<a class="text-secondary-fixed font-bold text-xs tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all uppercase" href="#equipe" style="">
+                    Conheça nosso time <span class="material-symbols-outlined text-sm" style="">arrow_forward</span>
+</a>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-high p-10 shadow-xl shadow-primary/5">
+<span class="material-symbols-outlined text-tertiary text-4xl mb-6" style="">verified_user</span>
+<h3 class="text-xl font-bold text-primary mb-4 tracking-tight" style="">DIFERENCIAIS</h3>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 text-sm text-on-surface-variant" style="">
+<span class="material-symbols-outlined text-secondary text-lg" style="">check_circle</span>
+                        Alta disponibilidade e rápido atendimento
+                    </li>
+<li class="flex items-start gap-3 text-sm text-on-surface-variant" style="">
+<span class="material-symbols-outlined text-secondary text-lg" style="">check_circle</span>
+                        Traduções que combinam IA + revisão humana
+                    </li>
+<li class="flex items-start gap-3 text-sm text-on-surface-variant" style="">
+<span class="material-symbols-outlined text-secondary text-lg" style="">check_circle</span>
+                        Time pequeno e especializado, garantindo uniformidade, consistência e atenção a cada detalhe
+                    </li>
+<li class="flex items-start gap-3 text-sm text-on-surface-variant" style="">
+<span class="material-symbols-outlined text-secondary text-lg" style="">check_circle</span>
+                        Confidencialidade e Firewall físico
+                    </li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Áreas de Atuação -->
+<section class="py-24 max-w-7xl mx-auto px-8" id="atuacao">
+<div class="mb-16">
+<h2 class="text-3xl md:text-4xl font-headline font-bold text-primary tracking-tight mb-4" style="">ÁREAS DE ATUAÇÃO</h2>
+<div class="w-20 h-1.5 bg-tertiary mb-6"></div>
+<p class="text-on-surface-variant text-lg max-w-3xl leading-relaxed" style="">A equipe da Green Associados atua há mais de 20 anos em diversos segmentos do mercado, sendo especialista nas seguintes áreas:</p>
+</div>
+<div class="grid md:grid-cols-2 gap-8">
+<!-- Specialty 1: Comunicação Corporativa -->
+<div class="group p-8 bg-surface-container-low border-l-4 border-transparent hover:border-secondary transition-all">
+<div class="flex items-center gap-4 mb-6">
+<div class="p-3 bg-white rounded-full text-secondary shadow-sm">
+<span class="material-symbols-outlined text-3xl" style="">corporate_fare</span>
+</div>
+<h3 class="text-xl font-bold text-primary" style="">Comunicação Corporativa</h3>
+</div>
+<p class="text-on-surface-variant text-sm mb-8 leading-relaxed" style="">Nossos serviços profissionais são respaldados por knowledge e experiência, a fim de garantir que a transmissão de informações para seus stakeholders globais seja clara e precisa, colaborando na construção da reputação de sua empresa.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Balanços sociais</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Websites</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Press releases</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Newsletters</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Folders</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Acordos e contratos</li>
+</ul>
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Códigos de conduta ética</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Políticas de divulgação e negociação</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Relatórios de avaliação e de rating</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Relatórios anuais e de sustentabilidade</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Materiais de comunicação para eventos</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Materiais de comunicação interna</li>
+</ul>
+</div>
+</div>
+<!-- Specialty 2: Relações com Investidores -->
+<div class="group p-8 bg-surface-container-low border-l-4 border-transparent hover:border-secondary transition-all">
+<div class="flex items-center gap-4 mb-6">
+<div class="p-3 bg-white rounded-full text-secondary shadow-sm">
+<span class="material-symbols-outlined text-3xl" style="">query_stats</span>
+</div>
+<h3 class="text-xl font-bold text-primary" style="">Relações com Investidores</h3>
+</div>
+<p class="text-on-surface-variant text-sm mb-8 leading-relaxed" style="">Nossa comprovada experiência e longa especialização no mercado de RI são componentes essenciais para ajudá-lo a alavancar o potencial de sua base acionária fora do Brasil.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+<div>
+<h4 class="text-xs font-bold text-secondary uppercase tracking-widest mb-4 border-b border-secondary/20 pb-2" style="">Divulgação de resultados trimestrais</h4>
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Releases de resultados</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Discursos para teleconferência</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Apresentações</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Transcrições</li>
+</ul>
+</div>
+<div>
+<h4 class="text-xs font-bold text-secondary uppercase tracking-widest mb-4 border-b border-secondary/20 pb-2" style="">Documentos diversos</h4>
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Comunicados ao mercado</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Fatos relevantes</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Atas de assembleias gerais e reuniões</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Apresentações para road shows</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Fact sheets</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Specialty 3: Financeira -->
+<div class="group p-8 bg-surface-container-low border-l-4 border-transparent hover:border-secondary transition-all">
+<div class="flex items-center gap-4 mb-6">
+<div class="p-3 bg-white rounded-full text-secondary shadow-sm">
+<span class="material-symbols-outlined text-3xl" style="">account_balance</span>
+</div>
+<h3 class="text-xl font-bold text-primary" style="">Financeira (documentos exigidos pela CVM e SEC)</h3>
+</div>
+<p class="text-on-surface-variant text-sm mb-8 leading-relaxed" style="">Nossa equipe possui extenso conhecimento de práticas contábeis e exigências regulatórias e de governança.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Informações Trimestrais (ITR)</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Demonstrações Padronizadas (DFP)</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Formulários de Referência</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Demonstrações financeiras e balanços contábeis</li>
+</ul>
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Parecer dos auditores</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Formulários 20-F, 10-K e 8-K (SEC)</li>
+<li class="flex items-start gap-2 text-sm text-on-surface-variant" style=""><span class="mt-1 w-1 h-1 bg-secondary rounded-full flex-shrink-0"></span> Manuais para participação em assembleias gerais</li>
+</ul>
+</div>
+</div>
+<!-- Specialty 4 -->
+<div class="group p-8 bg-surface-container-low border-l-4 border-transparent hover:border-secondary transition-all">
+<div class="flex items-center gap-4 mb-6">
+<div class="p-3 bg-white rounded-full text-secondary shadow-sm">
+<span class="material-symbols-outlined text-3xl" style="">gavel</span>
+</div>
+<h3 class="text-xl font-bold text-primary" style="">Jurídica</h3>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed" style="">No universo jurídico, cada termo importa — e qualquer imprecisão pode alterar o sentido de cláusulas e comprometer resultados. Por isso, nossas traduções jurídicas são realizadas por profissionais especializados, com profundo entendimento de conceitos legais e terminologia específica de cada jurisdição.</p>
+<div class="flex flex-wrap gap-4 text-xs font-semibold text-on-surface/70 tracking-wider">
+<span class="bg-white px-3 py-1 rounded border border-stone-200" style="">Procurações</span>
+<span class="bg-white px-3 py-1 rounded border border-stone-200" style="">Atas de assembleias</span>
+<span class="bg-white px-3 py-1 rounded border border-stone-200" style="">Contratos</span>
+<span class="bg-white px-3 py-1 rounded border border-stone-200" style="">Pareceres jurídicos</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Inteligência Artificial -->
+<section class="py-24 bg-primary text-white" id="ia">
+<div class="max-w-7xl mx-auto px-8 editorial-grid">
+<div class="col-span-full lg:col-span-7">
+<div class="flex items-center gap-4 mb-8">
+<div class="h-px w-12 bg-secondary-fixed"></div>
+<span class="text-secondary-fixed font-bold tracking-[0.3em] text-xs uppercase" style="">Tecnologia &amp; Inovação</span>
+</div>
+<h2 class="text-4xl md:text-5xl font-headline font-bold mb-10 leading-tight" style="">INTELIGÊNCIA ARTIFICIAL</h2>
+<div class="space-y-6 text-lg font-light opacity-90 leading-relaxed">
+<p class="" style="">Para seguir as últimas tecnologias aplicadas ao mercado linguístico e otimizar o tempo e os custos de nossos clientes, atualmente utilizamos na Green Associados uma ferramenta desenvolvida por e para tradutores, que combina Inteligência Artificial (IA) com os glossários e memórias de tradução desenvolvidos por nós, específicos para cada cliente atendido. Assim, é possível gerar conteúdos de qualidade superior, que passam por revisão e edição cuidadosa, humana e especializada de nossos sócios.</p>
+<p class="" style="">Além disso, desenvolvemos técnicas para revisões e pós-edição profissional de conteúdos traduzidos por IA gerados pelos clientes, corrigindo inconsistências, aprimorando o estilo e garantindo conformidade terminológica.<br/><br/>Desta forma, é possível obter o melhor equilíbrio entre eficiência, qualidade e economia — com textos finalizados prontos para publicação e alinhados às expectativas do público global.</p>
+</div>
+</div>
+<div class="col-span-full lg:col-span-5 flex flex-col justify-center gap-8">
+<div class="bg-white/5 backdrop-blur-sm p-8 border border-white/10 rounded-xl">
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-5xl text-secondary-fixed" style="">memory</span>
+<div>
+<h4 class="text-xl font-bold mb-1" style="">Processamento Híbrido</h4>
+<p class="text-sm text-surface-container-low" style="">Velocidade tecnológica aliada ao discernimento humano.</p>
+</div>
+</div>
+</div>
+<div class="bg-white/5 backdrop-blur-sm p-8 border border-white/10 rounded-xl">
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-5xl text-secondary-fixed" style="">verified</span>
+<div>
+<h4 class="text-xl font-bold mb-1" style="">Curadoria de Especialistas</h4>
+<p class="text-sm text-surface-container-low" style="">Revisão por tradutores com mais de 20 anos de mercado.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Segurança -->
+<section class="py-24 px-8 overflow-hidden" id="seguranca"><div class="max-w-7xl mx-auto px-8">
+<div class="grid lg:grid-cols-2 gap-16 items-center">
+<!-- Left side: Text & Context -->
+<div class="relative z-10">
+<div class="mb-12">
+<span class="text-tertiary font-bold tracking-[0.2em] text-xs uppercase block mb-2" style="">Protocolos Rigorosos</span>
+<h2 class="text-4xl md:text-5xl font-headline font-bold text-primary mb-6" style="">SEGURANÇA</h2>
+<div class="w-20 h-1.5 bg-tertiary mb-10"></div>
+</div>
+<div class="space-y-8">
+<p class="text-on-surface-variant text-lg leading-relaxed font-medium border-l-4 border-tertiary-fixed pl-6" style="">A Green Associados está ciente da imensa importância de se manter a confidencialidade e a integridade das informações recebidas de seus clientes.</p>
+<div class="space-y-4 text-on-surface-variant leading-relaxed opacity-80">
+<p style="">Por isso, todos os nossos processos foram desenvolvidos para este fim, com destaque para a utilização de infraestrutura de firewall física e independente em nossos servidores e da ferramenta de criptografia de e-mail Microsoft Exchange Hosted Encryption® em todas as mensagens de e-mail enviadas.</p>
+<p style="">A ferramenta utilizada em todas as traduções foi desenvolvida para garantir confidencialidade e segurança – por meio de criptografia, controles de acesso e armazenamento seguro–, atestada pela certificação SOC 2 Type II.</p>
+<p style="">Além disso, todos os membros da equipe e eventuais fornecedores que possam ter acesso a informações confidenciais possuem contrato de confidencialidade assinado com a Green Associados.</p>
+</div>
+</div>
+</div>
+<!-- Right side: Dynamic Pillar Layout -->
+<div class="relative">
+<!-- Large illustrative icon / Background Graphic -->
+<div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none -z-10">
+<span class="material-symbols-outlined text-[400px]" style="font-variation-settings: 'FILL' 1, 'wght' 200, 'GRAD' 0, 'opsz' 48;">shield</span>
+</div>
+<div class="relative grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+<!-- Pillar 1: Firewall -->
+<div class="bg-white p-8 rounded-2xl shadow-xl shadow-tertiary/5 border border-tertiary/10 md:translate-y-8 transition-transform hover:-translate-y-1 duration-500 group">
+<div class="w-14 h-14 rounded-xl bg-tertiary-fixed/30 flex items-center justify-center text-tertiary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="">dns</span>
+</div>
+<h4 class="text-lg font-bold text-primary mb-2" style="">Firewall independente</h4>
+<p class="text-sm text-on-surface-variant/70 leading-relaxed" style="">Infraestrutura física dedicada para proteção máxima de dados em nossos servidores.</p>
+</div>
+<!-- Pillar 2: Encryption -->
+<div class="bg-white p-8 rounded-2xl shadow-xl shadow-tertiary/5 border border-tertiary/10 transition-transform hover:-translate-y-1 duration-500 group">
+<div class="w-14 h-14 rounded-xl bg-tertiary-fixed/30 flex items-center justify-center text-tertiary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="">encrypted</span>
+</div>
+<h4 class="text-lg font-bold text-primary mb-2" style="">E-mail e conteúdos criptografados</h4>
+<p class="text-sm text-on-surface-variant/70 leading-relaxed" style="">Utilização de Microsoft Exchange Hosted Encryption® em todas as comunicações.</p>
+</div>
+<!-- Pillar 3: AI Security -->
+<div class="bg-white p-8 rounded-2xl shadow-xl shadow-tertiary/5 border border-tertiary/10 md:translate-y-12 transition-transform hover:-translate-y-1 duration-500 group">
+<div class="w-14 h-14 rounded-xl bg-tertiary-fixed/30 flex items-center justify-center text-tertiary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="">psychology_alt</span>
+</div>
+<h4 class="text-lg font-bold text-primary mb-2" style="">Uso seguro da IA</h4>
+<p class="text-sm text-on-surface-variant/70 leading-relaxed" style="">Tecnologia com certificação SOC 2 Type II para garantir privacidade total dos projetos.</p>
+</div>
+<!-- Pillar 4: NDA -->
+<div class="bg-white p-8 rounded-2xl shadow-xl shadow-tertiary/5 border border-tertiary/10 md:translate-y-4 transition-transform hover:-translate-y-1 duration-500 group">
+<div class="w-14 h-14 rounded-xl bg-tertiary-fixed/30 flex items-center justify-center text-tertiary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="">description</span>
+</div>
+<h4 class="text-lg font-bold text-primary mb-2" style="">Contrato de confidencialidade</h4>
+<p class="text-sm text-on-surface-variant/70 leading-relaxed" style="">Todos os envolvidos possuem NDAs assinados legalmente para sua tranquilidade.</p>
+</div>
+</div>
+<!-- Extra Decorative Graphic -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-secondary/5 rounded-full blur-3xl -z-10"></div>
+<div class="absolute -top-10 -left-10 w-40 h-40 bg-tertiary/5 rounded-full blur-3xl -z-10"></div>
+</div>
+</div>
+</div></section>
+<!-- Nossa Equipe -->
+<section class="py-24 bg-surface-container-low" id="equipe">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-headline font-bold text-primary mb-4" style="">NOSSA EQUIPE</h2>
+<p class="text-slate-600 text-lg font-light leading-relaxed max-w-4xl mx-auto" style="">Na Green Associados, nosso compromisso é garantir que sua comunicação internacional seja sempre segura, precisa e confiável. Aqui, temos paixão pelo que fazemos e traduzimos e revisamos seus documentos com cuidado e excelência.</p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+<!-- Team 1 -->
+<div class="flex items-center gap-6">
+<div class="w-24 h-24 rounded-full overflow-hidden bg-stone-300 flex-shrink-0 border-2 border-white shadow-md">
+<img alt="Renata Silverio Balbino" class="w-full h-full object-cover team-photo-bw" src="https://lh3.googleusercontent.com/aida/ADBb0ugN-XpFBfQU6KkH0PpwblKpRVejCN8fsgp_uc-aqAjkpCpAHtl5fq6SzNkzRzufo1v0zVK1rPxB5BYpev09lf3EbyKLClg_uxlCwO4uyJ5qIgxBVJKwdbaB-Uuy-OZ3oNJtIFuTUwru1m_VaumChNNIvCYEwzjw46lYD-908tr85im5EXuhCwVeBMl-MiOj7OGuvjupyLUFEKhZdjgzxKcIhG9v_POspfYUWnp0ki3und4Z-7CImPgHWLchkNkM45mCh1WXXOVDw-k" style=""/>
+</div>
+<div>
+<h4 class="font-bold text-primary tracking-tight" style="">RENATA SILVERIO BALBINO</h4>
+<p class="text-xs text-stone-500 uppercase tracking-wider mb-2" style="">Socia e tradutora</p>
+<a class="text-secondary hover:text-primary transition-colors" href="#" style="">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+</a>
+</div>
+</div>
+<!-- Team 2 -->
+<div class="flex items-center gap-6">
+<div class="w-24 h-24 rounded-full overflow-hidden bg-stone-300 flex-shrink-0 border-2 border-white shadow-md">
+<img alt="Samanta Bastos Alcardo" class="w-full h-full object-cover team-photo-bw" src="https://lh3.googleusercontent.com/aida/ADBb0uifpZ9SqtkTUdcmsPtexqIMez5tac1qpL88mEsWbyg-xpkeb4y0LFAt6elPu3xJ1Aq9AwEMFl_DHPso71qOokhnm-lRGT5ZP_neWrApambNyddzti-gnMSKhTajfzHsACo4YCgQEE0EracgmnDCnmn-y5763HVusnXHyu24XzgnLKpVyM7kMUS7IH2LfWH1qZSeDCLCUmmaxMApVVvBp9lf1CQae7rwBHOGhJShZnnt2HBq8ocEa-_14NIpjHWLYyMEoQ67x1XvHdY" style=""/>
+</div>
+<div>
+<h4 class="font-bold text-primary tracking-tight" style="">SAMANTA BASTOS ALCARDO</h4>
+<p class="text-xs text-stone-500 uppercase tracking-wider mb-2" style="">Socia e tradutora</p>
+<a class="text-secondary hover:text-primary transition-colors" href="#" style="">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+</a>
+</div>
+</div>
+<!-- Team 3 -->
+<div class="flex items-center gap-6">
+<div class="w-24 h-24 rounded-full overflow-hidden bg-stone-300 flex-shrink-0 border-2 border-white shadow-md">
+<img alt="Melisande Mancusi" class="w-full h-full object-cover team-photo-bw" src="https://lh3.googleusercontent.com/aida/ADBb0uiDDuj2gHjL0Teoc1-mKYqwWRCsq_p9nN4T3HrMrjU7NaWQ2ZUBeT5GkHv97CaneEof-kmVc-wp-iFD360VYs1GQ42fy4PsJtSujkHv9ibW8Iyxa9JBL9Ysw26mVN3x-t--ZPUvJk7SitP9tQak3x-sJIgG6VJ0I5eofGVyoZPy3zDtqHRlMIXNJsavSc0oZFKEHDXERfzWd4SlF8n8qRX27JPmlMnskREkvvaOKqBRiFdBscgvuH3rUhE34iwnjzyLcoxsvMWhLQ" style=""/>
+</div>
+<div>
+<h4 class="font-bold text-primary tracking-tight" style="">MELISANDE MANCUSI</h4>
+<p class="text-xs text-stone-500 uppercase tracking-wider mb-2" style="">Socia e tradutora</p>
+<a class="text-secondary hover:text-primary transition-colors" href="#" style="">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+</a>
+</div>
+</div>
+<!-- Team 4 -->
+<div class="flex items-center gap-6">
+<div class="w-24 h-24 rounded-full overflow-hidden bg-stone-300 flex-shrink-0 border-2 border-white shadow-md">
+<img alt="Vanessa Melhado" class="w-full h-full object-cover team-photo-bw" src="https://lh3.googleusercontent.com/aida/ADBb0uhUTppolMY-9gZoKWCTHVR_2kjWiDs3hvGUasW5JmETboDGnOHe0NUSgo3qAGlDLMTq2Ct1_jVUcJBGVo0MFivfaQn2xYJSpq3nI9QPcQYouXI05JnV5pUwI8x97WCvpyFhw0kZUxHnIOIHJD42CF_5c5JEKoCjmG3NKjtvZEldM_iF5z1jSe4FDM19WK-yLEpJPv6U3A4pLKIlWcqk_o7ODTlPCQcGxvjafLg93e0BYR5MxrjAH9obwGjP9QEmUtfXeiJB-hdedwA" style=""/>
+</div>
+<div>
+<h4 class="font-bold text-primary tracking-tight" style="">VANESSA MELHADO</h4>
+<p class="text-xs text-stone-500 uppercase tracking-wider mb-2" style="">Sócia, gestora de projetos e da parte administrativa</p>
+<a class="text-secondary hover:text-primary transition-colors" href="#" style="">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+</a>
+</div>
+</div>
+<!-- Team 5 -->
+<div class="flex items-center gap-6">
+<div class="w-24 h-24 rounded-full overflow-hidden bg-stone-300 flex-shrink-0 border-2 border-white shadow-md">
+<img alt="Diogo Hohl Orsi" class="w-full h-full object-cover team-photo-bw" src="https://lh3.googleusercontent.com/aida/ADBb0ugmom9e4FyJhjdvpr2VNibddXgtpo0_NAsmqCBeqNAZWhC9OW233qlmgqkzWQoaiD46oB_P2uC1qTkVGcBkAS0wm-otFfbnvePmmZc3AA-LSLfBXEAyo4uFBlfoWscsTEN-xI0iV7oXetaC7GLO-T_CDLDVR8a-SgFL9FVZFIG-t19zg5yrlCIUFWajZeZh_g3sJF0Cs9tY-liv9hp5trWKBxNb2CTATPIXhe39_X7xFjBaNS0G86zeKNLkDx2KuKGdvCYzJOYhTw" style=""/>
+</div>
+<div>
+<h4 class="font-bold text-primary tracking-tight" style="">DIOGO HOHL ORSI</h4>
+<p class="text-xs text-stone-500 uppercase tracking-wider mb-2" style="">Cofundador, sócio e gestor da parte financeira</p>
+<a class="text-secondary hover:text-primary transition-colors" href="#" style="">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+</a>
+</div>
+</div>
+<!-- Team 6 -->
+<div class="flex items-center gap-6">
+<div class="w-24 h-24 rounded-full overflow-hidden bg-stone-300 flex-shrink-0 border-2 border-white shadow-md">
+<img alt="Michael Joseph Finhane Green" class="w-full h-full object-cover team-photo-bw" src="https://lh3.googleusercontent.com/aida/ADBb0uh3WZT0eiPR1a-oHFZQAGo-O2xKbQTYjZGOZH_kK3NBDS7WKiQyk21ssGybs9_VVi3OfBgb4QnIlENbtajFa1oKMYZljGnYkWtUqXT4CsYnQ9x0sAdwkECRulkoL7VZTyfjOIyRUM7uqPXqLIvSAGR6KUnv35zePfskDFF6488abwyS9jmt3hY5kSU7U8NrqnImLFFWDF9Mv92mAuyiUruAt-YTLk1BsPfr57t0LhlwvyoLWVltRDF775pFl9NlImKfDra9BD8pocM" style=""/>
+</div>
+<div>
+<h4 class="font-bold text-primary tracking-tight" style="">MICHAEL JOSEPH FINHANE GREEN</h4>
+<p class="text-xs text-stone-500 uppercase tracking-wider mb-2" style="">Fundador e sócio majoritário</p>
+<a class="text-secondary hover:text-primary transition-colors" href="#" style="">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contato -->
+<section class="py-24 max-w-7xl mx-auto px-8" id="contato">
+<div class="bg-primary-container p-12 md:p-20 relative overflow-hidden">
+<div class="absolute right-0 top-0 w-1/3 h-full bg-tertiary-container/10 -skew-x-12 transform translate-x-20"></div>
+<div class="relative z-10 editorial-grid">
+<div class="col-span-full lg:col-span-6">
+<h2 class="text-4xl font-headline font-bold text-white mb-8" style="">FALE COM NOSSOS ESPECIALISTAS</h2>
+<p class="text-on-primary-container text-lg mb-12" style="">Fale com nossos especialistas e eleve a qualidade da sua comunicação global com tradução profissional, segura e técnica.</p>
+<div class="space-y-8">
+<div class="flex items-start gap-6">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl" style="">phone_in_talk</span>
+<div>
+<h5 class="text-white/60 text-xs font-bold uppercase tracking-widest mb-1" style="">Telefone</h5>
+<p class="text-xl text-white font-medium" style="">55 11 3812-8780</p>
+</div>
+</div>
+<div class="flex items-start gap-6">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl" style="">mail</span>
+<div>
+<h5 class="text-white/60 text-xs font-bold uppercase tracking-widest mb-1" style="">E-mail</h5>
+<p class="text-xl text-white font-medium" style="">traducao@greenassociados.com.br</p>
+</div>
+</div>
+<div class="flex items-start gap-6">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl" style="">location_on</span>
+<div>
+<h5 class="text-white/60 text-xs font-bold uppercase tracking-widest mb-1" style="">Endereço</h5>
+<p class="text-white/80 font-medium" style="">Avenida Pedroso de Morais, 631 – cj 107<br/>Pinheiros – São Paulo/SP</p>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-full lg:col-span-6 flex flex-col justify-center items-center lg:items-end mt-12 lg:mt-0">
+<a class="inline-flex items-center gap-4 px-12 py-6 bg-secondary-fixed text-on-secondary-fixed text-xl font-bold rounded-full hover:shadow-2xl hover:scale-105 transition-all" href="https://wa.me/551138128780" style="" target="_blank">
+<svg class="w-8 h-8 fill-current" viewbox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.001.332.005c.109.004.258-.041.404.311.159.385.541 1.32.588 1.416.046.096.077.208.014.332-.063.124-.095.202-.188.311-.093.109-.192.244-.274.327-.093.092-.191.192-.082.378.109.187.483.797 1.037 1.291.714.636 1.314.834 1.503.921.189.088.3-.01.411-.124.111-.114.475-.552.602-.74.127-.188.254-.159.428-.093.174.067 1.101.52 1.291.614.19.094.317.14.363.221.046.08.046.467-.098.873zM12 1c-6.075 0-11 4.925-11 11s4.925 11 11 11 11-4.925 11-11-4.925-11-11-11zm0 20c-4.963 0-9-4.037-9-9s4.037-9 9-9 9 4.037 9 9-4.037 9-9 9z"></path></svg>
+                        WhatsApp
+                    </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Refactored Footer -->
+<footer class="bg-stone-50 border-t border-stone-200 pt-20 pb-12">
+<div class="max-w-7xl mx-auto px-8">
+<!-- Row 1: 3 columns -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+<!-- Column 1: Logo and Slogan -->
+<div class="space-y-6">
+<img alt="Green Associados Logo" class="h-14 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0ujhQx7stSRcumOGpYGjgXH8liuJ53WMTQ7Tqj9nbMXHnElW8sKP8iUVU2GGzKr0DqyMUm81HBFM-wVGWJ1hqF25MIZZx2MIg79JHhKN-i58W3PGkmv3JvJMwtDR-mC6aY0dqHA2oyPLwCO6jY92sk-nTSFKi4fIEAqCQq8suXkLHEhJMQPIjF4AsKh7rSF0mOtp9EN2lAH4aMUyFJk8Tv18bbsvZ4gDmP2mtSP8vV0NkI-m3uJ2HUQpza_TdAx9lGV7vSpCICR9Yg" style=""/>
+<p class="text-stone-500 text-sm leading-relaxed" style="">Excelência e precisão técnica em traduções corporativas para o mercado global há mais de 20 anos.</p>
+</div>
+<!-- Column 2: Navigation Menu -->
+<div>
+<h4 class="text-primary font-bold text-xs tracking-widest uppercase mb-6 border-b border-secondary/20 pb-2" style="">Navegação</h4>
+<ul class="grid grid-cols-1 gap-3">
+<li class="" style=""><a class="text-stone-600 hover:text-secondary-fixed-dim transition-colors text-sm font-medium" href="#atuacao" style="">ÁREAS DE ATUAÇÃO</a></li>
+<li class="" style=""><a class="text-stone-600 hover:text-secondary-fixed-dim transition-colors text-sm font-medium" href="#ia" style="">INTELIGÊNCIA ARTIFICIAL</a></li>
+<li class="" style=""><a class="text-stone-600 hover:text-secondary-fixed-dim transition-colors text-sm font-medium" href="#seguranca" style="">SEGURANÇA</a></li>
+<li class="" style=""><a class="text-stone-600 hover:text-secondary-fixed-dim transition-colors text-sm font-medium" href="#equipe" style="">NOSSA EQUIPE</a></li>
+<li class="" style=""><a class="text-stone-600 hover:text-secondary-fixed-dim transition-colors text-sm font-medium" href="#contato" style="">CONTATO</a></li>
+</ul>
+</div>
+<!-- Column 3: Legal Information -->
+<div>
+<h4 class="text-primary font-bold text-xs tracking-widest uppercase mb-6 border-b border-secondary/20 pb-2" style="">Legal</h4>
+<ul class="space-y-3">
+<li class="" style=""><a class="text-stone-600 hover:text-secondary-fixed-dim transition-colors text-sm font-medium uppercase tracking-widest" href="#" style="">Privacidade</a></li>
+<li class="" style=""><a class="text-stone-600 hover:text-secondary-fixed-dim transition-colors text-sm font-medium uppercase tracking-widest" href="#" style="">Termos de Uso</a></li>
+</ul>
+</div>
+</div>
+<!-- Row 2: 2 columns -->
+<div class="pt-8 border-t border-stone-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-stone-400 uppercase tracking-widest">
+<div class="text-center md:text-left" style="">
+                © 2026 Green Associados. Todos os direitos reservados.
+            </div>
+<div class="text-center md:text-right" style="">
+                Desenvolvido por Fábrica das Artes
+            </div>
+</div>
+</div>
+</footer>
+</body></html>

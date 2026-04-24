@@ -1,0 +1,11 @@
+# Imagem WordPress com limites PHP adequados ao Elementor (Kit / documentos grandes).
+# Sem isto, post_max_size / max_input_vars baixos podem truncar o pedido de gravação.
+FROM wordpress:latest
+
+RUN { \
+	echo 'upload_max_filesize = 128M'; \
+	echo 'post_max_size = 128M'; \
+	echo 'max_input_vars = 10000'; \
+	echo 'memory_limit = 512M'; \
+	echo 'max_execution_time = 300'; \
+	} > /usr/local/etc/php/conf.d/zzz-green-elementor.ini
