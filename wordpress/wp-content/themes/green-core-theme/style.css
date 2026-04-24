@@ -4,7 +4,7 @@ Theme URI: https://greenassociados.com.br
 Author: Green Associados
 Author URI: https://greenassociados.com.br
 Description: Tema proprietário leve, headless-ready e orientado a blocos nativos.
-Version: 1.1.5
+Version: 1.1.9
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 8.1
@@ -348,6 +348,52 @@ body.green-nav-is-open {
 	margin-bottom: clamp(2rem, 5vw, 4rem);
 }
 
+/*
+ * Rodapé coluna 1 (logo + slogan)
+ * - align-self: a coluna não pode esticar à altura da linha (evita espaço + space-between interno).
+ * - justify-content: evita alinhamento «espaço entre» no flex vertical do Gutenberg.
+ * Seletores sem exigir .green-footer-site-cols (classe pode ter sido removida no editor).
+ */
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child {
+	align-self: flex-start !important;
+}
+
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child.is-layout-flex,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child > .is-layout-flex,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child > .wp-block-group.is-layout-flex,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child .is-layout-flex.is-vertical {
+	justify-content: flex-start !important;
+}
+
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child.is-content-justification-space-between,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child.is-content-justification-space-around,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child.is-content-justification-space-evenly {
+	justify-content: flex-start !important;
+}
+
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child {
+	--wp--style--block-gap: 0.5rem;
+}
+
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child .wp-block-site-logo {
+	margin-bottom: 0;
+}
+
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child .wp-block-site-logo a,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child .wp-block-site-logo .custom-logo-link {
+	display: block;
+	line-height: 0;
+}
+
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child .green-footer-lead {
+	margin-top: 0 !important;
+	margin-block-start: 0 !important;
+}
+
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child .green-footer-lead:not(:first-child) {
+	margin-block-end: 0;
+}
+
 .green-footer-from-page .wp-block-heading,
 .green-footer-from-page h4 {
 	font-size: 0.75rem;
@@ -541,6 +587,26 @@ body.green-nav-is-open {
 	position: absolute;
 	width: 1px;
 	word-wrap: normal !important;
+}
+
+/* Reveal ao scroll (IntersectionObserver adiciona .active) */
+.reveal {
+	opacity: 0;
+	transform: translateY(30px);
+	transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal.active {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
 }
 
 @media (max-width: 960px) {

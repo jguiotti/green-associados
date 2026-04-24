@@ -68,6 +68,61 @@ function green_core_theme_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'green_core_theme_assets' );
 
+/**
+ * Garante que o CSS da 1.ª coluna do rodapé (logo + slogan) aplique depois dos estilos globais dos blocos.
+ * Sem isto, regras do core / estilos globais podem carregar a seguir e anular o tema (havia «zero» efeito no browser).
+ */
+function green_core_theme_footer_column_layout_after_global_styles() {
+	$css = '
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child {
+	align-self: flex-start !important;
+}
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child.is-layout-flex,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child > .is-layout-flex,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child > .wp-block-group.is-layout-flex,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child .is-layout-flex.is-vertical,
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child [class*=is-content-justification-space-] {
+	justify-content: flex-start !important;
+}
+.green-footer-from-page .wp-block-columns > .wp-block-column:first-child p.green-footer-lead {
+	margin-top: 0 !important;
+	margin-block-start: 0 !important;
+}
+';
+	$deps = array( 'green-core-theme-style' );
+	if ( wp_style_is( 'wp-block-library', 'registered' ) ) {
+		array_unshift( $deps, 'wp-block-library' );
+	}
+	// Só anexa global-styles se existir (sem theme.json, o core pode não registar o handle).
+	if ( wp_style_is( 'global-styles', 'registered' ) ) {
+		$deps[] = 'global-styles';
+	}
+	wp_register_style( 'green-core-footer-column-layout', false, $deps, wp_get_theme()->get( 'Version' ) );
+	wp_enqueue_style( 'green-core-footer-column-layout' );
+	wp_add_inline_style( 'green-core-footer-column-layout', $css );
+}
+add_action( 'wp_enqueue_scripts', 'green_core_theme_footer_column_layout_after_global_styles', 200 );
+
+/**
+ * Tailwind (CDN) no front: utilitários nos blocos Green Native Builder.
+ * Cores alinhadas à paleta do tema; sem alterar o editor de blocos.
+ */
+function green_core_theme_enqueue_tailwind() {
+	if ( is_admin() ) {
+		return;
+	}
+	wp_enqueue_script(
+		'green-core-tailwind',
+		'https://cdn.tailwindcss.com',
+		array(),
+		'3.4.1',
+		false
+	);
+	$config = 'tailwind.config = { theme: { extend: { colors: { "brand-forest": "#005646", "brand-mint": "#42fdd3" } } } };';
+	wp_add_inline_script( 'green-core-tailwind', $config, 'after' );
+}
+add_action( 'wp_enqueue_scripts', 'green_core_theme_enqueue_tailwind', 1 );
+
 function green_core_theme_body_class( $classes ) {
 	$classes[] = 'green-core-theme';
 	return $classes;

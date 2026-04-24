@@ -227,11 +227,23 @@
 		} );
 	}
 
-	function initCardReveal() {
-		var cards = document.querySelectorAll( '.green-reveal-anim' );
-		if ( ! cards.length || ! ( 'IntersectionObserver' in window ) ) {
-			cards.forEach( function ( n ) {
-				n.classList.add( 'green-in-view' );
+	/**
+	 * Reveal ao scroll: .reveal recebe .active (CSS no tema; movimento suave).
+	 */
+	function initRevealClassActive() {
+		var reduce =
+			window.matchMedia &&
+			window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
+		var nodes = document.querySelectorAll( '.reveal' );
+		if ( reduce ) {
+			nodes.forEach( function ( el ) {
+				el.classList.add( 'active' );
+			} );
+			return;
+		}
+		if ( ! nodes.length || ! ( 'IntersectionObserver' in window ) ) {
+			nodes.forEach( function ( el ) {
+				el.classList.add( 'active' );
 			} );
 			return;
 		}
@@ -239,18 +251,18 @@
 			function ( entries ) {
 				entries.forEach( function ( entry ) {
 					if ( entry.isIntersecting ) {
-						entry.target.classList.add( 'green-in-view' );
+						entry.target.classList.add( 'active' );
 						io.unobserve( entry.target );
 					}
 				} );
 			},
-			{ root: null, rootMargin: '0px 0px -6% 0px', threshold: 0.06 }
+			{ root: null, rootMargin: '0px 0px -5% 0px', threshold: 0.08 }
 		);
-		cards.forEach( function ( n ) {
-			io.observe( n );
+		nodes.forEach( function ( el ) {
+			io.observe( el );
 		} );
 	}
 
 	initPolylangHashOnLangLinks();
-	initCardReveal();
+	initRevealClassActive();
 } )();

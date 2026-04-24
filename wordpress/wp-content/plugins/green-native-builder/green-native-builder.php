@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Green Native Builder
  * Description: Blocos Gutenberg proprietários para a Homepage da Green Associados.
- * Version: 1.1.3
+ * Version: 1.1.4
  * Author: Green Associados
  * Text Domain: green-native-builder
  *
@@ -104,12 +104,49 @@ function green_nb_render_link_button( $text, $url, $class ) {
 	if ( '' === $label || '' === $link ) {
 		return '';
 	}
+	$tw  = ' !rounded-2xl transition-transform duration-200 ease-out hover:scale-105 active:scale-95';
+	$all = trim( (string) $class ) . $tw;
 	return sprintf(
 		'<a class="%1$s" href="%2$s">%3$s</a>',
-		esc_attr( $class ),
+		esc_attr( $all ),
 		esc_url( $link ),
 		esc_html( $label )
 	);
+}
+
+/**
+ * Manchas de cor (fundo) em secções claras — utilitários Tailwind (tema enfileira tailwindcss.com).
+ */
+function green_nb_render_glow_marks_lite() {
+	echo '<div class="pointer-events-none absolute -z-0 left-[4%] top-0 h-64 w-64 -translate-x-1/3 rounded-full bg-[#42fdd3]/20 blur-3xl" aria-hidden="true"></div>';
+	echo '<div class="pointer-events-none absolute -z-0 right-[2%] bottom-0 h-72 w-72 translate-y-1/4 rounded-full bg-[#005646]/10 blur-3xl" aria-hidden="true"></div>';
+}
+
+/**
+ * Brilho suave em secções escuras (ex.: IA).
+ */
+function green_nb_render_glow_marks_dark() {
+	echo '<div class="pointer-events-none absolute -z-0 right-[8%] top-0 h-56 w-56 rounded-full bg-white/5 blur-3xl" aria-hidden="true"></div>';
+	echo '<div class="pointer-events-none absolute -z-0 left-[5%] bottom-10 h-64 w-64 rounded-full bg-[#42fdd3]/10 blur-3xl" aria-hidden="true"></div>';
+}
+
+/**
+ * Classes Tailwind reutilizadas no front (requer script tailwindcss.com do tema).
+ *
+ * @param string $key Identificador do padrão.
+ * @return string
+ */
+function green_nb_tw( $key ) {
+	$map = array(
+		'service_card'    => 'green-service-card !rounded-2xl !border-0 !shadow-[0_12px_44px_rgba(0,86,70,0.1)] border border-[#005646]/5 transition-all !duration-500 ease-out will-change-transform hover:-translate-y-2 hover:!shadow-[0_28px_55px_rgba(0,86,70,0.18)]',
+		'highlight_card'  => 'green-highlight-card !rounded-2xl sm:!rounded-[1.75rem] transition-all !duration-500 ease-out !shadow-[0_22px_50px_rgba(0,86,70,0.12)] will-change-transform hover:-translate-y-2 hover:!shadow-[0_32px_60px_rgba(0,86,70,0.18)]',
+		'security_pillar' => 'green-security-pillar !rounded-2xl sm:!rounded-[1.5rem] !border-0 !shadow-[0_12px_40px_rgba(0,86,70,0.1)] border border-[#005646]/8 transition-all !duration-500 ease-out will-change-transform hover:-translate-y-2 hover:!shadow-[0_26px_48px_rgba(0,86,70,0.16)]',
+		'ia_feature'      => 'green-ia-feature !rounded-2xl !border !border-white/10 !shadow-[0_12px_40px_rgba(0,0,0,0.2)] transition-all !duration-500 ease-out will-change-transform hover:-translate-y-2 hover:!border-white/20 hover:!shadow-[0_24px_50px_rgba(0,0,0,0.25)]',
+		'contact_card'    => 'green-contact-card !rounded-2xl sm:!rounded-3xl !shadow-[0_24px_60px_rgba(0,86,70,0.2)] border-0 transition-shadow duration-500',
+		'team_card'       => 'green-team-card group',
+		'team_photo'      => 'green-team-photo rounded-tl-3xl rounded-br-2xl object-cover transition-transform duration-500 group-hover:scale-110',
+	);
+	return isset( $map[ $key ] ) ? $map[ $key ] : '';
 }
 
 /**
@@ -126,7 +163,7 @@ function green_nb_register_assets() {
 		'green-native-builder-blocks',
 		green_nb_asset_url( 'assets/js/blocks.js' ),
 		array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
-		'1.0.9',
+		'1.0.10',
 		true
 	);
 
@@ -134,14 +171,14 @@ function green_nb_register_assets() {
 		'green-native-builder-style',
 		green_nb_asset_url( 'assets/css/blocks.css' ),
 		array(),
-		'1.0.9'
+		'1.0.10'
 	);
 
 	wp_register_style(
 		'green-native-builder-editor-style',
 		green_nb_asset_url( 'assets/css/blocks-editor.css' ),
 		array( 'wp-edit-blocks' ),
-		'1.0.9'
+		'1.0.10'
 	);
 }
 add_action( 'init', 'green_nb_register_assets' );
@@ -509,7 +546,7 @@ function green_nb_render_hero_banner( $attributes ) {
 			<div class="green-container green-hero-content">
 				<div class="green-hero-inner">
 					<?php if ( '' !== $badge ) : ?>
-						<span class="green-hero-badge"><?php echo esc_html( $badge ); ?></span>
+						<span class="green-hero-badge ring-1 ring-white/20"><?php echo esc_html( $badge ); ?></span>
 					<?php endif; ?>
 					<?php if ( '' !== $title ) : ?>
 						<h1 class="green-hero-title"><?php echo esc_html( $title ); ?></h1>
@@ -540,9 +577,10 @@ function green_nb_render_highlight_cards( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-highlight-wrap">
-		<div class="green-container">
-			<div class="green-highlight-grid">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-highlight-wrap relative z-20 -mt-24 overflow-hidden sm:!-mt-28 max-md:!-mt-12">
+		<div class="green-container relative z-[1]">
+			<?php green_nb_render_glow_marks_lite(); ?>
+			<div class="green-highlight-grid relative z-10 reveal">
 				<?php foreach ( $items as $item ) : ?>
 					<?php
 					$icon        = green_nb_sanitize_text( $item['icon'] ?? '' );
@@ -552,7 +590,7 @@ function green_nb_render_highlight_cards( $attributes ) {
 					$link_url    = green_nb_sanitize_url( $item['linkUrl'] ?? '' );
 					$tone        = green_nb_sanitize_text( $item['tone'] ?? 'light' );
 					?>
-					<article class="green-highlight-card green-reveal-anim green-highlight-<?php echo esc_attr( $tone ); ?>">
+					<article class="<?php echo esc_attr( green_nb_tw( 'highlight_card' ) ); ?> green-highlight-<?php echo esc_attr( $tone ); ?>">
 						<?php if ( '' !== $icon ) : ?>
 							<span class="material-symbols-outlined green-card-icon"><?php echo esc_html( $icon ); ?></span>
 						<?php endif; ?>
@@ -623,11 +661,11 @@ function green_nb_render_service_card( $service ) {
 
 	ob_start();
 	?>
-	<article class="green-service-card green-reveal-anim">
+	<article class="<?php echo esc_attr( green_nb_tw( 'service_card' ) ); ?>">
 		<?php if ( '' !== $icon || '' !== $title ) : ?>
 			<div class="green-service-head">
 				<?php if ( '' !== $icon ) : ?>
-					<div class="green-service-icon-wrap">
+					<div class="green-service-icon-wrap !rounded-full ring-2 ring-[#42fdd3]/25">
 						<span class="material-symbols-outlined green-service-icon"><?php echo esc_html( $icon ); ?></span>
 					</div>
 				<?php endif; ?>
@@ -711,9 +749,10 @@ function green_nb_render_areas_atuacao( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-areas-block">
-		<div class="green-container">
-			<div class="green-areas-intro">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-areas-block relative overflow-hidden">
+		<?php green_nb_render_glow_marks_lite(); ?>
+		<div class="green-container relative z-[1]">
+			<div class="green-areas-intro reveal">
 				<?php if ( '' !== $title ) : ?>
 					<h2 class="green-section-title"><?php echo esc_html( $title ); ?></h2>
 				<?php endif; ?>
@@ -723,7 +762,7 @@ function green_nb_render_areas_atuacao( $attributes ) {
 				<?php endif; ?>
 			</div>
 			<?php if ( ! empty( $services ) ) : ?>
-				<div class="green-service-grid">
+				<div class="green-service-grid reveal">
 					<?php foreach ( $services as $service ) : ?>
 						<?php echo green_nb_render_service_card( $service ); ?>
 					<?php endforeach; ?>
@@ -748,9 +787,10 @@ function green_nb_render_ia_section( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-ia-block">
-		<div class="green-container green-ia-grid">
-			<div>
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-ia-block relative overflow-hidden">
+		<?php green_nb_render_glow_marks_dark(); ?>
+		<div class="green-container green-ia-grid relative z-[1]">
+			<div class="reveal">
 				<?php if ( '' !== $label ) : ?>
 					<p class="green-ia-label"><?php echo esc_html( $label ); ?></p>
 				<?php endif; ?>
@@ -763,7 +803,7 @@ function green_nb_render_ia_section( $attributes ) {
 					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
-			<div class="green-ia-feature-list">
+			<div class="green-ia-feature-list reveal">
 				<?php foreach ( $features as $feature ) : ?>
 					<?php
 					$icon = green_nb_sanitize_text( $feature['icon'] ?? '' );
@@ -773,7 +813,7 @@ function green_nb_render_ia_section( $attributes ) {
 						continue;
 					}
 					?>
-					<article class="green-ia-feature green-reveal-anim">
+					<article class="<?php echo esc_attr( green_nb_tw( 'ia_feature' ) ); ?>">
 						<?php if ( '' !== $icon ) : ?>
 							<span class="material-symbols-outlined"><?php echo esc_html( $icon ); ?></span>
 						<?php endif; ?>
@@ -808,9 +848,10 @@ function green_nb_render_security_pillars( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-security-block">
-		<div class="green-container green-security-grid">
-			<div>
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-security-block relative overflow-hidden">
+		<?php green_nb_render_glow_marks_lite(); ?>
+		<div class="green-container green-security-grid relative z-[1]">
+			<div class="reveal">
 				<?php if ( '' !== $label ) : ?>
 					<p class="green-security-label"><?php echo esc_html( $label ); ?></p>
 				<?php endif; ?>
@@ -826,7 +867,7 @@ function green_nb_render_security_pillars( $attributes ) {
 					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
-			<div class="green-security-pillar-grid">
+			<div class="green-security-pillar-grid reveal">
 				<?php foreach ( $pillars as $pillar ) : ?>
 					<?php
 					$icon = green_nb_sanitize_text( $pillar['icon'] ?? '' );
@@ -836,7 +877,7 @@ function green_nb_render_security_pillars( $attributes ) {
 						continue;
 					}
 					?>
-					<article class="green-security-pillar green-reveal-anim">
+					<article class="<?php echo esc_attr( green_nb_tw( 'security_pillar' ) ); ?>">
 						<?php if ( '' !== $icon ) : ?>
 							<span class="material-symbols-outlined"><?php echo esc_html( $icon ); ?></span>
 						<?php endif; ?>
@@ -867,15 +908,16 @@ function green_nb_render_team_grid( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-team-block">
-		<div class="green-container">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-team-block relative overflow-hidden">
+		<?php green_nb_render_glow_marks_lite(); ?>
+		<div class="green-container relative z-[1]">
 			<?php if ( '' !== $title ) : ?>
-				<h2 class="green-section-title green-center"><?php echo esc_html( $title ); ?></h2>
+				<h2 class="green-section-title green-center reveal"><?php echo esc_html( $title ); ?></h2>
 			<?php endif; ?>
 			<?php if ( '' !== $description ) : ?>
-				<p class="green-section-description green-center"><?php echo esc_html( $description ); ?></p>
+				<p class="green-section-description green-center reveal"><?php echo esc_html( $description ); ?></p>
 			<?php endif; ?>
-			<div class="green-team-grid">
+			<div class="green-team-grid reveal">
 				<?php foreach ( $members as $member ) : ?>
 					<?php
 					$name     = green_nb_sanitize_text( $member['name'] ?? '' );
@@ -896,10 +938,10 @@ function green_nb_render_team_grid( $attributes ) {
 						continue;
 					}
 					?>
-					<article class="green-team-card">
+					<article class="<?php echo esc_attr( green_nb_tw( 'team_card' ) ); ?>">
 						<?php if ( '' !== $photo ) : ?>
 							<div class="green-team-photo-wrap">
-								<img src="<?php echo esc_url( $photo ); ?>" alt="<?php echo esc_attr( $name ); ?>" class="green-team-photo" width="192" height="192" loading="lazy" decoding="async">
+								<img src="<?php echo esc_url( $photo ); ?>" alt="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( green_nb_tw( 'team_photo' ) ); ?>" width="192" height="192" loading="lazy" decoding="async">
 							</div>
 						<?php endif; ?>
 						<div class="green-team-text">
@@ -942,9 +984,10 @@ function green_nb_render_contact_section( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-contact-block">
-		<div class="green-container">
-			<div class="green-contact-card">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-contact-block relative overflow-hidden">
+		<?php green_nb_render_glow_marks_lite(); ?>
+		<div class="green-container relative z-[1]">
+			<div class="<?php echo esc_attr( green_nb_tw( 'contact_card' ) ); ?> reveal">
 				<div>
 					<?php if ( '' !== $title ) : ?>
 						<h2 class="green-contact-title"><?php echo esc_html( $title ); ?></h2>
@@ -996,7 +1039,7 @@ function green_nb_render_contact_section( $attributes ) {
 					$wa_label = green_nb_sanitize_text( $wa_text );
 					$wa_link  = green_nb_sanitize_url( $wa_url );
 					if ( '' !== $wa_label && '' !== $wa_link ) {
-						echo '<a class="green-btn green-btn-wa" href="' . esc_url( $wa_link ) . '">';
+						echo '<a class="green-btn green-btn-wa !rounded-full transition-transform duration-200 ease-out hover:scale-105 active:scale-95" href="' . esc_url( $wa_link ) . '">';
 						echo green_nb_whatsapp_icon_svg(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo '<span class="green-btn-wa-label">' . esc_html( $wa_label ) . '</span>';
 						echo '</a>';
