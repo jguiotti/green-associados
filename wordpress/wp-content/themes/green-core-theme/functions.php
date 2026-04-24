@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once get_template_directory() . '/inc/site-layout.php';
 require_once get_template_directory() . '/inc/seo-yoast.php';
+require_once get_template_directory() . '/inc/polylang-switcher.php';
 
 function green_core_theme_setup() {
 	add_theme_support( 'title-tag' );

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Green Native Builder
  * Description: Blocos Gutenberg proprietários para a Homepage da Green Associados.
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Green Associados
  * Text Domain: green-native-builder
  *
@@ -126,7 +126,7 @@ function green_nb_register_assets() {
 		'green-native-builder-blocks',
 		green_nb_asset_url( 'assets/js/blocks.js' ),
 		array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
-		'1.0.8',
+		'1.0.9',
 		true
 	);
 
@@ -134,14 +134,14 @@ function green_nb_register_assets() {
 		'green-native-builder-style',
 		green_nb_asset_url( 'assets/css/blocks.css' ),
 		array(),
-		'1.0.8'
+		'1.0.9'
 	);
 
 	wp_register_style(
 		'green-native-builder-editor-style',
 		green_nb_asset_url( 'assets/css/blocks-editor.css' ),
 		array( 'wp-edit-blocks' ),
-		'1.0.8'
+		'1.0.9'
 	);
 }
 add_action( 'init', 'green_nb_register_assets' );
@@ -190,7 +190,7 @@ function green_nb_register_blocks() {
 			array(
 				'attributes'      => array(
 					'backgroundUrl'        => array( 'type' => 'string', 'default' => '' ),
-					'badge'                => array( 'type' => 'string', 'default' => '' ),
+					'badge'                => array( 'type' => 'string', 'default' => 'TRADUÇÕES CORPORATIVAS DE ALTO NÍVEL' ),
 					'title'                => array( 'type' => 'string', 'default' => '' ),
 					'subtitle'             => array( 'type' => 'string', 'default' => '' ),
 					'primaryButtonText'    => array( 'type' => 'string', 'default' => '' ),
@@ -223,7 +223,7 @@ function green_nb_register_blocks() {
 			array(
 				'attributes'      => array(
 					'sectionTitle'       => array( 'type' => 'string', 'default' => '' ),
-					'sectionDescription' => array( 'type' => 'string', 'default' => '' ),
+					'sectionDescription' => array( 'type' => 'string', 'default' => 'A Green Associados atua em diversos segmentos do mercado, com especialização nas seguintes áreas:' ),
 					'services'           => array( 'type' => 'array', 'default' => array() ),
 				),
 				'render_callback' => 'green_nb_render_areas_atuacao',
@@ -280,7 +280,7 @@ function green_nb_register_blocks() {
 	);
 
 	$contact_attrs = array(
-		'title'        => array( 'type' => 'string', 'default' => '' ),
+		'title'        => array( 'type' => 'string', 'default' => 'FALE CONOSCO' ),
 		'description'  => array( 'type' => 'string', 'default' => '' ),
 		'phoneLabel'   => array( 'type' => 'string', 'default' => '' ),
 		'phone'        => array( 'type' => 'string', 'default' => '' ),
@@ -458,15 +458,18 @@ function green_nb_render_site_header( $attributes ) {
 			<?php if ( $show_lang && function_exists( 'pll_the_languages' ) ) : ?>
 				<div class="green-header-lang" aria-label="<?php esc_attr_e( 'Seletor de idioma', 'green-core-theme' ); ?>">
 					<?php
-					pll_the_languages(
-						array(
-							'display_names_as' => 'slug',
-							'dropdown'         => 0,
-							'hide_current'     => 0,
-							'raw'              => 0,
-							'show_flags'       => 0,
-						)
-					);
+					if ( function_exists( 'green_core_theme_render_language_switcher' ) ) {
+						green_core_theme_render_language_switcher();
+					} else {
+						pll_the_languages(
+							array(
+								'dropdown'         => 0,
+								'hide_current'     => 0,
+								'display_names_as' => 'name',
+								'show_flags'       => 1,
+							)
+						);
+					}
 					?>
 				</div>
 			<?php endif; ?>
@@ -549,7 +552,7 @@ function green_nb_render_highlight_cards( $attributes ) {
 					$link_url    = green_nb_sanitize_url( $item['linkUrl'] ?? '' );
 					$tone        = green_nb_sanitize_text( $item['tone'] ?? 'light' );
 					?>
-					<article class="green-highlight-card green-highlight-<?php echo esc_attr( $tone ); ?>">
+					<article class="green-highlight-card green-reveal-anim green-highlight-<?php echo esc_attr( $tone ); ?>">
 						<?php if ( '' !== $icon ) : ?>
 							<span class="material-symbols-outlined green-card-icon"><?php echo esc_html( $icon ); ?></span>
 						<?php endif; ?>
@@ -620,7 +623,7 @@ function green_nb_render_service_card( $service ) {
 
 	ob_start();
 	?>
-	<article class="green-service-card">
+	<article class="green-service-card green-reveal-anim">
 		<?php if ( '' !== $icon || '' !== $title ) : ?>
 			<div class="green-service-head">
 				<?php if ( '' !== $icon ) : ?>
@@ -685,11 +688,11 @@ function green_nb_render_service_card( $service ) {
 		<?php endif; ?>
 
 		<?php if ( ! empty( $tags ) ) : ?>
-			<div class="green-service-tags">
+			<ul class="green-service-list green-service-list--as-tags">
 				<?php foreach ( $tags as $tag ) : ?>
-					<span class="green-service-tag"><?php echo esc_html( $tag ); ?></span>
+					<li><span class="green-service-dot" aria-hidden="true"></span><?php echo esc_html( $tag ); ?></li>
 				<?php endforeach; ?>
-			</div>
+			</ul>
 		<?php endif; ?>
 	</article>
 	<?php
@@ -770,7 +773,7 @@ function green_nb_render_ia_section( $attributes ) {
 						continue;
 					}
 					?>
-					<article class="green-ia-feature">
+					<article class="green-ia-feature green-reveal-anim">
 						<?php if ( '' !== $icon ) : ?>
 							<span class="material-symbols-outlined"><?php echo esc_html( $icon ); ?></span>
 						<?php endif; ?>
@@ -833,7 +836,7 @@ function green_nb_render_security_pillars( $attributes ) {
 						continue;
 					}
 					?>
-					<article class="green-security-pillar">
+					<article class="green-security-pillar green-reveal-anim">
 						<?php if ( '' !== $icon ) : ?>
 							<span class="material-symbols-outlined"><?php echo esc_html( $icon ); ?></span>
 						<?php endif; ?>
@@ -896,7 +899,7 @@ function green_nb_render_team_grid( $attributes ) {
 					<article class="green-team-card">
 						<?php if ( '' !== $photo ) : ?>
 							<div class="green-team-photo-wrap">
-								<img src="<?php echo esc_url( $photo ); ?>" alt="<?php echo esc_attr( $name ); ?>" class="green-team-photo">
+								<img src="<?php echo esc_url( $photo ); ?>" alt="<?php echo esc_attr( $name ); ?>" class="green-team-photo" width="192" height="192" loading="lazy" decoding="async">
 							</div>
 						<?php endif; ?>
 						<div class="green-team-text">
@@ -907,8 +910,8 @@ function green_nb_render_team_grid( $attributes ) {
 								<p><?php echo esc_html( $role ); ?></p>
 							<?php endif; ?>
 							<?php if ( '' !== $link ) : ?>
-								<a href="<?php echo esc_url( $link ); ?>" class="green-team-link" aria-label="<?php esc_attr_e( 'LinkedIn', 'green-native-builder' ); ?>">
-									<span class="material-symbols-outlined">work</span>
+								<a href="<?php echo esc_url( $link ); ?>" class="green-team-link" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'Perfil no LinkedIn', 'green-native-builder' ); ?>">
+									<span class="material-symbols-outlined" aria-hidden="true">work</span>
 								</a>
 							<?php endif; ?>
 						</div>

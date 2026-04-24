@@ -4,7 +4,7 @@ Theme URI: https://greenassociados.com.br
 Author: Green Associados
 Author URI: https://greenassociados.com.br
 Description: Tema proprietário leve, headless-ready e orientado a blocos nativos.
-Version: 1.1.2
+Version: 1.1.5
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 8.1
@@ -110,6 +110,8 @@ body.green-nav-is-open {
 	gap: clamp(12px, 3vw, 24px);
 	padding-block: 16px;
 	position: relative;
+	min-width: 0;
+	flex-wrap: nowrap;
 }
 
 .green-header-end {
@@ -121,9 +123,10 @@ body.green-nav-is-open {
 }
 
 .green-header-nav {
-	flex: 1 1 auto;
+	flex: 1 1 0;
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	min-width: 0;
 }
 
@@ -188,6 +191,11 @@ body.green-nav-is-open {
 	transform: rotate(-45deg);
 }
 
+.green-header-logo {
+	flex: 0 0 auto;
+	min-width: 0;
+}
+
 .green-header-logo img,
 .green-header-logo .custom-logo-link img,
 .green-header-logo-img {
@@ -218,11 +226,13 @@ body.green-nav-is-open {
 
 .green-header-nav .menu {
 	display: flex;
+	flex-direction: row;
 	list-style: none;
 	gap: clamp(12px, 2vw, 28px);
 	margin: 0;
 	padding: 0;
 	justify-content: center;
+	align-items: center;
 	flex-wrap: wrap;
 }
 
@@ -238,7 +248,7 @@ body.green-nav-is-open {
 
 .green-header-nav a:hover,
 .green-header-nav a:focus-visible {
-	color: #0f766e;
+	color: var( --green-secondary-fixed );
 }
 
 .green-header-lang {
@@ -249,6 +259,8 @@ body.green-nav-is-open {
 	opacity: 0.85;
 	flex-shrink: 0;
 	padding: 4px 6px;
+	max-width: 120px;
+	min-width: 0;
 }
 
 .green-header-lang ul {
@@ -266,12 +278,8 @@ body.green-nav-is-open {
 	align-items: center;
 }
 
-.green-header-lang li:not(:last-child)::after {
-	content: "|";
-	margin: 0 0.45em;
-	font-weight: 600;
-	opacity: 0.35;
-	pointer-events: none;
+.green-header-lang .green-header-lang-list li:not( :last-child ) {
+	margin-right: 8px;
 }
 
 .green-header-lang a {
@@ -281,8 +289,45 @@ body.green-nav-is-open {
 }
 
 .green-header-lang a:hover {
-	color: #0f766e;
+	color: var( --green-secondary-fixed );
 	opacity: 1;
+}
+
+.green-header-lang .green-header-lang-list img,
+.green-header-lang .green-lang-flag-img,
+.green-header-lang .green-lang-flag-icon {
+	display: block;
+	width: 22px;
+	height: auto;
+	max-height: 16px;
+	object-fit: cover;
+	border-radius: 2px;
+	box-shadow: 0 0 0 1px rgba( 0, 0, 0, 0.08 );
+}
+
+/* Bandeiras de marca (PNG; cantos já vêm no ficheiro) — evita duplicar o raio. */
+.green-header-lang .green-lang-flag-img--brand {
+	width: 28px;
+	max-height: none;
+	height: auto;
+	border-radius: 0;
+	box-shadow: none;
+	object-fit: contain;
+}
+
+.green-header-lang .green-header-lang-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0;
+}
+
+.green-header-lang .green-lang-fallback-initials {
+	font-size: 0.65rem;
+	font-weight: 800;
+	letter-spacing: 0.04em;
+	color: var( --green-primary );
+	min-width: 1.5rem;
+	text-align: center;
 }
 
 .green-site-footer {
@@ -335,7 +380,7 @@ body.green-nav-is-open {
 }
 
 .green-footer-from-page .wp-block-column a:hover {
-	color: #0f766e;
+	color: var( --green-secondary-fixed );
 }
 
 .green-footer-from-page .wp-block-separator {
@@ -367,7 +412,7 @@ body.green-nav-is-open {
 }
 
 .green-footer-from-page .wp-block-navigation .wp-block-navigation-item .wp-block-navigation-item__content:hover {
-	color: #0f766e;
+	color: var( --green-secondary-fixed );
 }
 
 .green-footer-from-page .wp-block-navigation .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
@@ -405,7 +450,7 @@ body.green-nav-is-open {
 }
 
 .green-footer-from-page ul.menu a:hover {
-	color: #0f766e;
+	color: var( --green-secondary-fixed );
 }
 
 .green-footer-from-page .wp-block-navigation:not(.is-vertical) .wp-block-navigation__container {

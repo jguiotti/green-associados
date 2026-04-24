@@ -155,7 +155,7 @@
 						PanelBody,
 						{ title: __( 'Idiomas (Polylang)', 'green-native-builder' ), initialOpen: false },
 						el( ToggleControl, {
-							label: __( 'Mostrar seletor PT | EN', 'green-native-builder' ),
+							label: __( 'Mostrar seletor de idioma (Polylang)', 'green-native-builder' ),
 							checked: attributes.showLangSwitcher,
 							onChange: ( showLangSwitcher ) => setAttributes( { showLangSwitcher } ),
 						} )
@@ -181,7 +181,7 @@
 		},
 		attributes: {
 			backgroundUrl: { type: 'string', default: '' },
-			badge: { type: 'string', default: '' },
+			badge: { type: 'string', default: 'TRADUÇÕES CORPORATIVAS DE ALTO NÍVEL' },
 			title: { type: 'string', default: '' },
 			subtitle: { type: 'string', default: '' },
 			primaryButtonText: { type: 'string', default: '' },
@@ -403,7 +403,10 @@
 		},
 		attributes: {
 			sectionTitle: { type: 'string', default: '' },
-			sectionDescription: { type: 'string', default: '' },
+			sectionDescription: {
+				type: 'string',
+				default: 'A Green Associados atua em diversos segmentos do mercado, com especialização nas seguintes áreas:',
+			},
 			services: { type: 'array', default: [] },
 		},
 		edit: ( { attributes, setAttributes } ) => {
@@ -887,7 +890,7 @@
 	} );
 
 	const contactSectionAttributes = {
-		title: { type: 'string', default: '' },
+		title: { type: 'string', default: 'FALE CONOSCO' },
 		description: { type: 'string', default: '' },
 		phoneLabel: { type: 'string', default: '' },
 		phone: { type: 'string', default: '' },

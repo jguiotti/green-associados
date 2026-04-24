@@ -196,4 +196,61 @@
 			smoothScrollToHash( window.location.hash );
 		}, 80 );
 	}
+
+	function initPolylangHashOnLangLinks() {
+		var links = document.querySelectorAll(
+			'.green-header-lang a.green-header-lang-link, .green-header-lang .menu a[href], .green-header-lang-list a[href]'
+		);
+		links.forEach( function ( a ) {
+			a.addEventListener( 'click', function ( e ) {
+				var h = window.location.hash;
+				if ( ! h || h.length < 2 ) {
+					return;
+				}
+				if ( e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey ) {
+					return;
+				}
+				var raw = a.getAttribute( 'href' );
+				if ( ! raw || raw === '#' || raw === '#0' ) {
+					return;
+				}
+				e.preventDefault();
+				try {
+					var u = new URL( raw, window.location.href );
+					u.hash = h;
+					window.location.assign( u.toString() );
+				} catch ( err2 ) {
+					var clean = String( raw ).split( '#' )[ 0 ];
+					window.location.assign( clean + h );
+				}
+			} );
+		} );
+	}
+
+	function initCardReveal() {
+		var cards = document.querySelectorAll( '.green-reveal-anim' );
+		if ( ! cards.length || ! ( 'IntersectionObserver' in window ) ) {
+			cards.forEach( function ( n ) {
+				n.classList.add( 'green-in-view' );
+			} );
+			return;
+		}
+		var io = new IntersectionObserver(
+			function ( entries ) {
+				entries.forEach( function ( entry ) {
+					if ( entry.isIntersecting ) {
+						entry.target.classList.add( 'green-in-view' );
+						io.unobserve( entry.target );
+					}
+				} );
+			},
+			{ root: null, rootMargin: '0px 0px -6% 0px', threshold: 0.06 }
+		);
+		cards.forEach( function ( n ) {
+			io.observe( n );
+		} );
+	}
+
+	initPolylangHashOnLangLinks();
+	initCardReveal();
 } )();

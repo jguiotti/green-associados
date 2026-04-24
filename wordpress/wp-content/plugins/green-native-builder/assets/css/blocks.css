@@ -191,7 +191,7 @@
 }
 
 .green-highlight-card p {
-	margin: 0 0 24px;
+	margin: 0 0 1.5rem;
 	font-size: 14px;
 	line-height: 1.65;
 }
@@ -243,7 +243,7 @@
 }
 
 .green-areas-block {
-	padding: 96px 0;
+	padding: 128px 0;
 	background: #fcf9f7;
 }
 
@@ -274,12 +274,12 @@
 .green-section-divider {
 	width: 80px;
 	height: 6px;
-	background: #7d3714;
+	background: #42fdd3;
 	margin: 24px 0;
 }
 
 .green-section-description {
-	margin: 0;
+	margin: 0 0 1.5rem;
 	max-width: 760px;
 	font-size: 18px;
 	line-height: 1.625;
@@ -310,7 +310,7 @@
 
 .green-service-icon {
 	display: block;
-	font-size: 28px;
+	font-size: 24px;
 	line-height: 1;
 	color: #006b57;
 }
@@ -324,7 +324,7 @@
 
 .green-service-card p,
 .green-service-lead {
-	margin: 0 0 24px;
+	margin: 0 0 1.5rem;
 	font-size: 14px;
 	line-height: 1.625;
 	color: #3e4945;
@@ -339,21 +339,22 @@
 
 .green-service-icon-wrap {
 	flex-shrink: 0;
-	width: 56px;
-	height: 56px;
+	width: 48px;
+	height: 48px;
 	padding: 0;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	background: #fff;
+	background: rgba(66, 253, 211, 0.2);
 	border-radius: 50%;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	border: none;
+	box-shadow: none;
 	box-sizing: border-box;
 	overflow: hidden;
 }
 
 .green-service-icon-wrap .material-symbols-outlined {
-	font-size: 28px;
+	font-size: 24px;
 	line-height: 1;
 }
 
@@ -385,9 +386,13 @@
 	align-items: flex-start;
 	gap: 8px;
 	font-size: 14px;
-	line-height: 1.5;
+	line-height: 1.625;
 	color: #3e4945;
 	margin-bottom: 8px;
+}
+
+.green-service-list--as-tags {
+	margin-top: 8px;
 }
 
 .green-service-dot {
@@ -443,7 +448,7 @@
 }
 
 .green-ia-block {
-	padding: 96px 0;
+	padding: 128px 0;
 	background: #005646;
 	color: #fff;
 }
@@ -473,9 +478,9 @@
 }
 
 .green-ia-paragraph {
-	margin: 0 0 20px;
+	margin: 0 0 1.5rem;
 	font-size: 17px;
-	line-height: 1.7;
+	line-height: 1.65;
 	color: rgba(255, 255, 255, 0.9);
 }
 
@@ -545,12 +550,13 @@
 .green-ia-feature p {
 	margin: 0;
 	font-size: 14px;
+	line-height: 1.65;
 	color: #f6f3f1;
 }
 
 .green-security-block {
-	padding: 96px 0;
-	background: #f4f2f0;
+	padding: 128px 0;
+	background: #f0fdf9;
 }
 
 .green-security-grid {
@@ -566,13 +572,13 @@
 	font-weight: 700;
 	letter-spacing: 0.18em;
 	text-transform: uppercase;
-	color: #7d3714;
+	color: #006b57;
 }
 
 .green-security-intro {
-	margin: 0 0 24px;
+	margin: 0 0 1.5rem;
 	padding-left: 24px;
-	border-left: 4px solid #ffdbcd;
+	border-left: 4px solid #42fdd3;
 	font-size: 17px;
 	line-height: 1.65;
 	color: #3e4945;
@@ -580,7 +586,7 @@
 }
 
 .green-security-paragraph {
-	margin: 0 0 16px;
+	margin: 0 0 1.5rem;
 	font-size: 15px;
 	line-height: 1.65;
 	color: rgba(62, 73, 69, 0.8);
@@ -594,14 +600,14 @@
 
 .green-security-pillar {
 	background: #fff;
-	border: 1px solid rgba(125, 55, 20, 0.1);
+	border: 1px solid rgba(0, 86, 70, 0.12);
 	border-radius: 16px;
 	padding: 28px;
 	transition: border-color 0.2s ease, background 0.2s ease, transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .green-security-pillar:hover {
-	border-color: rgba(125, 55, 20, 0.22);
+	border-color: rgba(0, 107, 87, 0.28);
 	background: #fffefc;
 	transform: translateY(-3px);
 	box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
@@ -609,7 +615,7 @@
 
 .green-security-pillar .material-symbols-outlined {
 	font-size: 28px;
-	color: #7d3714;
+	color: #006b57;
 }
 
 .green-security-pillar h4 {
@@ -626,8 +632,8 @@
 }
 
 .green-team-block {
-	padding: 96px 0;
-	background: #f6f3f1;
+	padding: 128px 0;
+	background: #effefa;
 }
 
 .green-team-block .green-section-description.green-center {
@@ -667,12 +673,13 @@
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	filter: grayscale(100%);
-	transition: filter 0.4s ease;
+	transform: scale(1);
+	transform-origin: center;
+	transition: transform 0.5s ease;
 }
 
 .green-team-card:hover .green-team-photo {
-	filter: grayscale(0%);
+	transform: scale(1.1);
 }
 
 .green-team-text h4 {
@@ -699,7 +706,7 @@
 }
 
 .green-contact-block {
-	padding: 96px 0;
+	padding: 128px 0;
 	background: #fafaf9;
 }
 
@@ -826,6 +833,17 @@
 	color: #a8a29e;
 }
 
+.green-reveal-anim {
+	opacity: 0;
+	transform: translate3d(0, 22px, 0);
+	transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.green-reveal-anim.green-in-view {
+	opacity: 1;
+	transform: none;
+}
+
 /*
  * main e o div wrapper da home têm .green-section mas são contentores altos.
  * Com threshold 0.08 no IntersectionObserver, a razão visível/total no viewport
@@ -860,9 +878,16 @@ main.green-site-main > .green-section:not(.green-in-view) {
 		transition: none;
 	}
 
+	.green-reveal-anim {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+
 	.green-ia-feature:hover,
 	.green-service-card:hover,
-	.green-security-pillar:hover {
+	.green-security-pillar:hover,
+	.green-team-card:hover .green-team-photo {
 		transform: none;
 	}
 }
@@ -912,7 +937,7 @@ main.green-site-main > .green-section:not(.green-in-view) {
 	.green-security-block,
 	.green-team-block,
 	.green-contact-block {
-		padding: 56px 0;
+		padding: 72px 0;
 	}
 
 	.green-contact-card {

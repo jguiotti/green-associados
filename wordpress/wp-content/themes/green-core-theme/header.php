@@ -56,16 +56,8 @@ $green_use_block_header = $green_header_post && trim( (string) $green_header_pos
 		<div class="green-header-end">
 			<div class="green-header-lang" aria-label="<?php esc_attr_e( 'Seletor de idioma', 'green-core-theme' ); ?>">
 				<?php
-				if ( function_exists( 'pll_the_languages' ) ) {
-					pll_the_languages(
-						array(
-							'display_names_as' => 'slug',
-							'dropdown'         => 0,
-							'hide_current'     => 0,
-							'raw'              => 0,
-							'show_flags'       => 0,
-						)
-					);
+				if ( function_exists( 'green_core_theme_render_language_switcher' ) ) {
+					green_core_theme_render_language_switcher();
 				}
 				?>
 			</div>

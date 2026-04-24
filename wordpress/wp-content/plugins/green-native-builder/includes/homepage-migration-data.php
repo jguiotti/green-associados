@@ -22,7 +22,7 @@ function green_nb_get_homepage_migration_blocks() {
 			'blockName'    => 'green/hero-banner',
 			'attrs'        => array(
 				'backgroundUrl'       => $hero_bg,
-				'badge'               => 'Traduções Corporativas de Elite',
+				'badge'               => 'TRADUÇÕES CORPORATIVAS DE ALTO NÍVEL',
 				'title'               => 'Assim como você, nós também percorremos um longo caminho para chegar aonde estamos.',
 				'subtitle'            => 'Criada por associados com mais de 20 anos de atuação em traduções financeiras e corporativas para as principais companhias brasileiras, a Green Associados possui a experiência e o conhecimento necessários para que a sua mensagem seja interpretada corretamente em qualquer parte do mundo.',
 				'primaryButtonText'   => 'Fale Conosco',
@@ -78,7 +78,7 @@ function green_nb_get_homepage_migration_blocks() {
 			'blockName'    => 'green/areas-atuacao',
 			'attrs'        => array(
 				'sectionTitle'       => 'ÁREAS DE ATUAÇÃO',
-				'sectionDescription' => 'A equipe da Green Associados atua há mais de 20 anos em diversos segmentos do mercado, sendo especialista nas seguintes áreas:',
+				'sectionDescription' => 'A Green Associados atua em diversos segmentos do mercado, com especialização nas seguintes áreas:',
 				'services'           => array(
 					array(
 						'icon'        => 'corporate_fare',
@@ -147,12 +147,13 @@ function green_nb_get_homepage_migration_blocks() {
 						'icon'        => 'gavel',
 						'title'       => 'Jurídica',
 						'description' => 'No universo jurídico, cada termo importa — e qualquer imprecisão pode alterar o sentido de cláusulas e comprometer resultados. Por isso, nossas traduções jurídicas são realizadas por profissionais especializados, com profundo entendimento de conceitos legais e terminologia específica de cada jurisdição.',
-						'tags'        => array(
+						'listLeft'    => array(
 							'Procurações',
 							'Atas de assembleias',
 							'Contratos',
 							'Pareceres jurídicos',
 						),
+						'listRight'   => array(),
 					),
 				),
 			),
@@ -173,13 +174,13 @@ function green_nb_get_homepage_migration_blocks() {
 				'features'   => array(
 					array(
 						'icon'        => 'memory',
-						'title'       => 'Processamento Híbrido',
-						'description' => 'Velocidade tecnológica aliada ao discernimento humano.',
+						'title'       => 'PROCESSAMENTO HÍBRIDO',
+						'description' => 'Velocidade tecnológica aliada à percepção humana.',
 					),
 					array(
 						'icon'        => 'verified',
-						'title'       => 'Curadoria de Especialistas',
-						'description' => 'Revisão por tradutores com mais de 20 anos de mercado.',
+						'title'       => 'CURADORIA DE ESPECIALISTAS',
+						'description' => 'Seus arquivos revisados por profissionais experientes, com mais de 20 anos de mercado.',
 					),
 				),
 			),
@@ -195,8 +196,8 @@ function green_nb_get_homepage_migration_blocks() {
 				'intro'      => 'A Green Associados está ciente da imensa importância de se manter a confidencialidade e a integridade das informações recebidas de seus clientes.',
 				'paragraphs' => array(
 					'Por isso, todos os nossos processos foram desenvolvidos para este fim, com destaque para a utilização de infraestrutura de firewall física e independente em nossos servidores e da ferramenta de criptografia de e-mail Microsoft Exchange Hosted Encryption® em todas as mensagens de e-mail enviadas.',
-					'A ferramenta utilizada em todas as traduções foi desenvolvida para garantir confidencialidade e segurança – por meio de criptografia, controles de acesso e armazenamento seguro–, atestada pela certificação SOC 2 Type II.',
-					'Além disso, todos os membros da equipe e eventuais fornecedores que possam ter acesso a informações confidenciais possuem contrato de confidencialidade assinado com a Green Associados.',
+					'A ferramenta utilizada em todas as traduções foi desenvolvida para garantir confidencialidade e segurança — por meio de criptografia, controles de acesso e armazenamento seguro —, atestada pela certificação SOC 2 Type II.',
+					'Além disso, toda a equipa e eventuais fornecedoras e fornecedores que possam ter acesso a informações confidenciais assinam contrato de confidencialidade com a Green Associados.',
 				),
 				'pillars'    => array(
 					array(
@@ -276,8 +277,8 @@ function green_nb_get_homepage_migration_blocks() {
 		array(
 			'blockName'    => 'green/contact-section',
 			'attrs'        => array(
-				'title'        => 'FALE COM NOSSOS ESPECIALISTAS',
-				'description'  => 'Fale com nossos especialistas e eleve a qualidade da sua comunicação global com tradução profissional, segura e técnica.',
+				'title'        => 'FALE CONOSCO',
+				'description'  => 'Fale conosco e eleve a qualidade da sua comunicação global com tradução profissional, segura e técnica.',
 				'phoneLabel'   => 'Telefone',
 				'phone'        => '55 11 3812-8780',
 				'emailLabel'   => 'E-mail',
