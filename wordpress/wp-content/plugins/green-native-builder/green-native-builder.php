@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Green Native Builder
  * Description: Blocos Gutenberg proprietários para a Homepage da Green Associados.
- * Version: 1.1.4
+ * Version: 1.2.4
  * Author: Green Associados
  * Text Domain: green-native-builder
  *
@@ -98,13 +98,133 @@ function green_nb_get_section_id( $attributes, $default = '' ) {
 	return '' !== $sanitized ? $sanitized : '';
 }
 
+/**
+ * Normaliza cor hexadecimal segura para atributos fill em SVG.
+ *
+ * @param string $value Cor (com ou sem #). Entrada inválida devolve branco.
+ * @return string Com #, 6 hex.
+ */
+function green_nb_sanitize_hex_color_str( $value ) {
+	$s = ltrim( is_string( $value ) ? trim( $value ) : '', '#' );
+	if ( 6 === strlen( $s ) && preg_match( '/^[0-9A-Fa-f]+$/', $s ) ) {
+		return '#' . $s;
+	}
+	return '#ffffff';
+}
+
+/**
+ * Caminho: arco convexo (parabólica simétrica, Bézier quadrática Q só — sem C/S).
+ * viewBox 0 0 1440 100.
+ */
+function green_nb_arc_path_convex_q() {
+	return 'M0,0 Q720,100 1440,0 L1440,100 L0,100 Z';
+}
+
+/**
+ * Arco côncavo (topo de secção) — mesmo eixo, Q simétrico.
+ */
+function green_nb_arc_path_concave_q() {
+	return 'M0,100 Q720,0 1440,100 L1440,0 L0,0 Z';
+}
+
+/**
+ * Classe `text-*` (fill-current) a partir de #hex normalizado.
+ *
+ * @param string $key_hex #hex
+ * @return string ex.: text-primary, text-surface, text-white.
+ */
+function green_nb_divider_text_class_for_next_bg( $key_hex ) {
+	$k = strtolower( ltrim( (string) $key_hex, '#' ) );
+	if ( '006060' === $k || '0d9488' === $k ) {
+		return 'text-primary';
+	}
+	if ( 'ffffff' === $k || 'fff' === $k ) {
+		return 'text-white';
+	}
+	if ( 'fafaf7' === $k || 'faf7f0' === $k ) {
+		return 'text-surface';
+	}
+	return 'text-primary';
+}
+
+/**
+ * Arco inferior do hero: convexo, branco (emenda com o corpo claro / cards).
+ * Posição absoluta no fundo de `.green-hero-bg` (não entra no flex do conteúdo).
+ */
+function green_nb_print_divider_hero_bottom() {
+	?>
+		<div class="green-nb-arc-hero-bottom pointer-events-none absolute bottom-0 left-0 z-[4] w-full h-16 leading-[0] md:h-28" aria-hidden="true">
+			<svg class="block absolute -bottom-1 left-0 h-full w-full text-white" preserveAspectRatio="none" viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg" focusable="false">
+				<path class="fill-current" d="<?php echo esc_attr( green_nb_arc_path_convex_q() ); ?>"/>
+			</svg>
+		</div>
+		<?php
+}
+
+/**
+ * Arco convexo — preenchimento = fundo da secção **seguinte** (`fill-current` + `text-*`).
+ * Pode colocar-se no fim da secção anterior **ou** no início da seguinte (transição análoga).
+ *
+ * @param string $next_bg_hex #hex (ex. #006060, #FAFAF7) ou a palavra-chave "surface" / "white" / "primary".
+ * @param string $container_extra_class Classes no contentor (ex. bg-white, bg-surface) se a onda fica no topo da secção seguinte e o fill coincidia com o fundo.
+ */
+function green_nb_print_divider_section_bottom( $next_bg_hex, $container_extra_class = '' ) {
+	$in = is_string( $next_bg_hex ) ? trim( $next_bg_hex ) : '';
+	if ( 'surface' === strtolower( $in ) ) {
+		$text_class = 'text-surface';
+	} else {
+		$fill         = green_nb_sanitize_hex_color_str( '' !== $in ? $in : '#ffffff' );
+		$text_class = green_nb_divider_text_class_for_next_bg( $fill );
+	}
+	$extra = is_string( $container_extra_class ) && '' !== trim( $container_extra_class ) ? ' ' . trim( $container_extra_class ) : '';
+	?>
+	<div class="green-nb-arc-join green-nb-wave-between-sections pointer-events-none relative z-[1] h-16 w-full leading-[0] md:h-28<?php echo esc_attr( $extra ); ?>" aria-hidden="true">
+		<svg class="<?php echo esc_attr( 'absolute -bottom-1 left-0 block h-full w-full ' . $text_class ); ?>" preserveAspectRatio="none" viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg" focusable="false">
+			<path class="fill-current" d="<?php echo esc_attr( green_nb_arc_path_convex_q() ); ?>"/>
+		</svg>
+	</div>
+	<?php
+}
+
+/**
+ * Arco côncavo no topo de uma secção (sorriso), fill = ligação com a transição.
+ *
+ * @param string $text_class ex. text-primary, text-white.
+ */
+function green_nb_print_divider_concave_top( $text_class ) {
+	$allow = array( 'text-primary', 'text-white', 'text-surface', 'text-background' );
+	$in    = trim( (string) $text_class );
+	$tc    = in_array( $in, $allow, true ) ? $in : 'text-white';
+	?>
+	<div class="green-nb-arc-concave-top pointer-events-none relative z-[1] -mt-px h-16 w-full leading-[0] md:h-28" aria-hidden="true">
+		<svg class="<?php echo esc_attr( 'absolute -top-1 left-0 block h-full w-full ' . $tc ); ?>" preserveAspectRatio="none" viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg" focusable="false">
+			<path class="fill-current" d="<?php echo esc_attr( green_nb_arc_path_concave_q() ); ?>"/>
+		</svg>
+	</div>
+	<?php
+}
+
+/**
+ * Títulos de secção: escala e peso (Tailwind) — inclusive em leitores de ecrã (HTML semântico).
+ *
+ * @param string $tone 'on-dark' | 'on-light'.
+ * @return string
+ */
+function green_nb_section_title_tw( $tone = 'on-light' ) {
+	$base = 'green-section-title !text-3xl !leading-tight !tracking-tight !font-extrabold sm:!text-4xl md:!text-5xl';
+	if ( 'on-dark' === $tone ) {
+		return $base . ' !text-white';
+	}
+	return $base . ' !text-primary';
+}
+
 function green_nb_render_link_button( $text, $url, $class ) {
 	$label = green_nb_sanitize_text( $text );
 	$link  = green_nb_sanitize_url( $url );
 	if ( '' === $label || '' === $link ) {
 		return '';
 	}
-	$tw  = ' !rounded-2xl transition-transform duration-200 ease-out hover:scale-105 active:scale-95';
+	$tw  = ' !inline-flex !items-center !justify-center !rounded-full !px-8 !py-3 !text-[15px] !font-bold !no-underline transition-transform duration-200 ease-out hover:scale-105 active:scale-95';
 	$all = trim( (string) $class ) . $tw;
 	return sprintf(
 		'<a class="%1$s" href="%2$s">%3$s</a>',
@@ -116,10 +236,18 @@ function green_nb_render_link_button( $text, $url, $class ) {
 
 /**
  * Manchas de cor (fundo) em secções claras — utilitários Tailwind (tema enfileira tailwindcss.com).
+ *
+ * @param string $context 'default' | 'areas' | 'contact' — desloca o blob superior para não ficar cortado pelo limite da secção.
  */
-function green_nb_render_glow_marks_lite() {
-	echo '<div class="pointer-events-none absolute -z-0 left-[4%] top-0 h-64 w-64 -translate-x-1/3 rounded-full bg-[#42fdd3]/20 blur-3xl" aria-hidden="true"></div>';
-	echo '<div class="pointer-events-none absolute -z-0 right-[2%] bottom-0 h-72 w-72 translate-y-1/4 rounded-full bg-[#005646]/10 blur-3xl" aria-hidden="true"></div>';
+function green_nb_render_glow_marks_lite( $context = 'default' ) {
+	$top_first = 'top-0';
+	if ( 'areas' === $context ) {
+		$top_first = 'top-24 md:top-32';
+	} elseif ( 'contact' === $context ) {
+		$top_first = 'top-14 md:top-20';
+	}
+	echo '<div class="pointer-events-none absolute -z-0 left-[4%] ' . esc_attr( $top_first ) . ' h-64 w-64 -translate-x-1/3 rounded-full bg-secondary/25 blur-3xl" aria-hidden="true"></div>';
+	echo '<div class="pointer-events-none absolute -z-0 right-[2%] bottom-0 h-72 w-72 translate-y-1/4 rounded-full bg-primary/15 blur-3xl" aria-hidden="true"></div>';
 }
 
 /**
@@ -127,7 +255,7 @@ function green_nb_render_glow_marks_lite() {
  */
 function green_nb_render_glow_marks_dark() {
 	echo '<div class="pointer-events-none absolute -z-0 right-[8%] top-0 h-56 w-56 rounded-full bg-white/5 blur-3xl" aria-hidden="true"></div>';
-	echo '<div class="pointer-events-none absolute -z-0 left-[5%] bottom-10 h-64 w-64 rounded-full bg-[#42fdd3]/10 blur-3xl" aria-hidden="true"></div>';
+	echo '<div class="pointer-events-none absolute -z-0 left-[5%] bottom-10 h-64 w-64 rounded-full bg-secondary/15 blur-3xl" aria-hidden="true"></div>';
 }
 
 /**
@@ -138,11 +266,11 @@ function green_nb_render_glow_marks_dark() {
  */
 function green_nb_tw( $key ) {
 	$map = array(
-		'service_card'    => 'green-service-card !rounded-2xl !border-0 !shadow-[0_12px_44px_rgba(0,86,70,0.1)] border border-[#005646]/5 transition-all !duration-500 ease-out will-change-transform hover:-translate-y-2 hover:!shadow-[0_28px_55px_rgba(0,86,70,0.18)]',
-		'highlight_card'  => 'green-highlight-card !rounded-2xl sm:!rounded-[1.75rem] transition-all !duration-500 ease-out !shadow-[0_22px_50px_rgba(0,86,70,0.12)] will-change-transform hover:-translate-y-2 hover:!shadow-[0_32px_60px_rgba(0,86,70,0.18)]',
-		'security_pillar' => 'green-security-pillar !rounded-2xl sm:!rounded-[1.5rem] !border-0 !shadow-[0_12px_40px_rgba(0,86,70,0.1)] border border-[#005646]/8 transition-all !duration-500 ease-out will-change-transform hover:-translate-y-2 hover:!shadow-[0_26px_48px_rgba(0,86,70,0.16)]',
-		'ia_feature'      => 'green-ia-feature !rounded-2xl !border !border-white/10 !shadow-[0_12px_40px_rgba(0,0,0,0.2)] transition-all !duration-500 ease-out will-change-transform hover:-translate-y-2 hover:!border-white/20 hover:!shadow-[0_24px_50px_rgba(0,0,0,0.25)]',
-		'contact_card'    => 'green-contact-card !rounded-2xl sm:!rounded-3xl !shadow-[0_24px_60px_rgba(0,86,70,0.2)] border-0 transition-shadow duration-500',
+		'service_card'    => 'green-service-card w-full !max-w-lg !rounded-3xl !border !border-slate-200/90 !bg-stone-50 !px-5 !py-8 !text-left !text-slate-700 !shadow-xl !shadow-slate-900/5 transition-transform duration-300 ease-out will-change-transform sm:!px-7 sm:!py-9 hover:-translate-y-0.5 hover:!shadow-2xl hover:!shadow-teal-900/5',
+		'highlight_card'  => 'green-highlight-card !rounded-[2rem] sm:!rounded-[2rem] !border !border-slate-200/80 !bg-white !shadow-xl !shadow-slate-900/6 transition-all !duration-500 will-change-transform hover:-translate-y-0.5 hover:!shadow-2xl hover:!shadow-slate-900/8',
+		'security_pillar' => 'green-security-pillar !max-w-sm !border-0 !bg-transparent !p-4 !shadow-none transition-transform duration-500 ease-out md:!p-5 hover:translate-y-[-2px]',
+		'ia_feature'      => 'green-ia-feature !mx-auto !w-full !max-w-md !rounded-[1.75rem] !border !border-white/10 !bg-white/5 !p-5 !shadow-none !backdrop-blur-sm sm:!p-6 transition-all duration-500 hover:-translate-y-2 hover:!shadow-2xl',
+		'contact_card'    => 'green-contact-card !items-center !rounded-[2rem] !border !border-slate-200/90 !bg-white !text-left !text-slate-800 !shadow-xl !shadow-slate-900/8',
 		'team_card'       => 'green-team-card group',
 		'team_photo'      => 'green-team-photo rounded-tl-3xl rounded-br-2xl object-cover transition-transform duration-500 group-hover:scale-110',
 	);
@@ -158,12 +286,24 @@ function green_nb_whatsapp_icon_svg() {
 	return '<svg class="green-btn-wa-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
 }
 
+/**
+ * Versão do ficheiro CSS (cache-bust a cada deploy).
+ */
+function green_nb_blocks_asset_version( $file_rel ) {
+	$path = __DIR__ . '/' . ltrim( $file_rel, '/' );
+	$m    = is_readable( $path ) ? (int) filemtime( $path ) : 0;
+	return $m > 0 ? (string) $m : '1.2.4';
+}
+
 function green_nb_register_assets() {
+	$ver_js  = green_nb_blocks_asset_version( 'assets/js/blocks.js' );
+	$ver_css = green_nb_blocks_asset_version( 'assets/css/blocks.css' );
+
 	wp_register_script(
 		'green-native-builder-blocks',
 		green_nb_asset_url( 'assets/js/blocks.js' ),
 		array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
-		'1.0.10',
+		$ver_js,
 		true
 	);
 
@@ -171,17 +311,40 @@ function green_nb_register_assets() {
 		'green-native-builder-style',
 		green_nb_asset_url( 'assets/css/blocks.css' ),
 		array(),
-		'1.0.10'
+		$ver_css
 	);
 
 	wp_register_style(
 		'green-native-builder-editor-style',
 		green_nb_asset_url( 'assets/css/blocks-editor.css' ),
 		array( 'wp-edit-blocks' ),
-		'1.0.10'
+		$ver_css
 	);
 }
 add_action( 'init', 'green_nb_register_assets' );
+
+/**
+ * Garante o CSS do builder no front (em alguns alojamentos o estilo de bloco não é enfileirado).
+ */
+function green_nb_enqueue_blocks_style_front() {
+	if ( is_admin() || ! is_singular() ) {
+		return;
+	}
+	$post = get_post();
+	if ( ! $post || ! is_string( $post->post_content ) ) {
+		return;
+	}
+	if ( strpos( $post->post_content, 'wp:green/' ) === false ) {
+		return;
+	}
+	if ( ! wp_style_is( 'green-native-builder-style', 'registered' ) ) {
+		return;
+	}
+	if ( ! wp_style_is( 'green-native-builder-style', 'enqueued' ) ) {
+		wp_enqueue_style( 'green-native-builder-style' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'green_nb_enqueue_blocks_style_front', 15 );
 
 /**
  * Dados para o bloco Cabeçalho (lista de menus).
@@ -530,23 +693,24 @@ function green_nb_render_hero_banner( $attributes ) {
 	$primary_button = green_nb_render_link_button(
 		$attributes['primaryButtonText'] ?? '',
 		$attributes['primaryButtonUrl'] ?? '',
-		'green-btn green-btn-primary'
+		'green-btn !bg-white !text-primary shadow-lg shadow-primary/20 hover:!bg-white/95'
 	);
 	$secondary_button = green_nb_render_link_button(
 		$attributes['secondaryButtonText'] ?? '',
 		$attributes['secondaryButtonUrl'] ?? '',
-		'green-btn green-btn-outline'
+		'green-btn !border-2 !border-white/50 !bg-white/5 !text-white !backdrop-blur-sm hover:!border-white/80 hover:!bg-white/10'
 	);
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-hero-block">
-		<div class="green-hero-bg"<?php echo $background ? ' style="background-image:url(' . esc_url( $background ) . ');"' : ''; ?>>
-			<div class="green-hero-overlay"></div>
-			<div class="green-container green-hero-content">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-hero-block relative overflow-hidden">
+		<div class="green-hero-bg relative"<?php echo $background ? ' style="background-image:url(' . esc_url( $background ) . ');"' : ''; ?>>
+			<div class="green-hero-overlay" aria-hidden="true"></div>
+			<div class="green-hero-dim" aria-hidden="true"></div>
+			<div class="mx-auto w-full max-w-[1200px] px-6 md:px-8 relative z-10 green-hero-content">
 				<div class="green-hero-inner">
 					<?php if ( '' !== $badge ) : ?>
-						<span class="green-hero-badge ring-1 ring-white/20"><?php echo esc_html( $badge ); ?></span>
+						<span class="green-hero-badge !border !border-white/20 !bg-secondary/20 !text-white"><?php echo esc_html( $badge ); ?></span>
 					<?php endif; ?>
 					<?php if ( '' !== $title ) : ?>
 						<h1 class="green-hero-title"><?php echo esc_html( $title ); ?></h1>
@@ -560,8 +724,9 @@ function green_nb_render_hero_banner( $attributes ) {
 							<?php echo wp_kses_post( $secondary_button ); ?>
 						</div>
 					<?php endif; ?>
+					</div>
 				</div>
-			</div>
+			<?php green_nb_print_divider_hero_bottom(); ?>
 		</div>
 	</section>
 	<?php
@@ -577,8 +742,8 @@ function green_nb_render_highlight_cards( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-highlight-wrap relative z-20 -mt-24 overflow-hidden sm:!-mt-28 max-md:!-mt-12">
-		<div class="green-container relative z-[1]">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-highlight-wrap relative z-10 -mt-24 overflow-visible !bg-transparent sm:!-mt-28 max-md:!-mt-12">
+		<div class="green-container relative z-[1] pb-8">
 			<?php green_nb_render_glow_marks_lite(); ?>
 			<div class="green-highlight-grid relative z-10 reveal">
 				<?php foreach ( $items as $item ) : ?>
@@ -587,10 +752,15 @@ function green_nb_render_highlight_cards( $attributes ) {
 					$title       = green_nb_sanitize_text( $item['title'] ?? '' );
 					$description = green_nb_sanitize_text( $item['description'] ?? '' );
 					$link_text   = green_nb_sanitize_text( $item['linkText'] ?? '' );
-					$link_url    = green_nb_sanitize_url( $item['linkUrl'] ?? '' );
-					$tone        = green_nb_sanitize_text( $item['tone'] ?? 'light' );
+					$link_url  = green_nb_sanitize_url( $item['linkUrl'] ?? '' );
+					$tone      = green_nb_sanitize_text( $item['tone'] ?? 'light' );
+					$is_equipe = (
+						( '' !== $title && ( 0 === strcasecmp( $title, 'NOSSA EQUIPE' ) || 0 === strcasecmp( $title, 'OUR TEAM' ) ) )
+						|| ( 'groups' === $icon && ( '' === $link_url || false !== stripos( $link_url, 'equipe' ) || false !== stripos( $link_url, 'team' ) ) )
+					);
+					$article_mod = $is_equipe ? ' green-highlight-equipe' : '';
 					?>
-					<article class="<?php echo esc_attr( green_nb_tw( 'highlight_card' ) ); ?> green-highlight-<?php echo esc_attr( $tone ); ?>">
+					<article class="<?php echo esc_attr( green_nb_tw( 'highlight_card' ) . $article_mod ); ?> green-highlight-<?php echo esc_attr( $tone ); ?>">
 						<?php if ( '' !== $icon ) : ?>
 							<span class="material-symbols-outlined green-card-icon"><?php echo esc_html( $icon ); ?></span>
 						<?php endif; ?>
@@ -663,19 +833,19 @@ function green_nb_render_service_card( $service ) {
 	?>
 	<article class="<?php echo esc_attr( green_nb_tw( 'service_card' ) ); ?>">
 		<?php if ( '' !== $icon || '' !== $title ) : ?>
-			<div class="green-service-head">
+			<div class="flex flex-col items-start text-left">
 				<?php if ( '' !== $icon ) : ?>
-					<div class="green-service-icon-wrap !rounded-full ring-2 ring-[#42fdd3]/25">
-						<span class="material-symbols-outlined green-service-icon"><?php echo esc_html( $icon ); ?></span>
+					<div class="mb-5 flex h-16 w-16 shrink-0 items-center justify-center self-start rounded-full bg-secondary text-white shadow-md shadow-slate-900/10 ring-2 ring-slate-200/80">
+						<span class="material-symbols-outlined text-[1.75rem] leading-none"><?php echo esc_html( $icon ); ?></span>
 					</div>
 				<?php endif; ?>
 				<?php if ( '' !== $title ) : ?>
-					<h3><?php echo esc_html( $title ); ?></h3>
+					<h3 class="!mb-3 !w-full !text-left !text-lg !font-bold !text-primary md:!text-xl"><?php echo esc_html( $title ); ?></h3>
 				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 		<?php if ( '' !== $description ) : ?>
-			<p class="green-service-lead"><?php echo esc_html( $description ); ?></p>
+			<p class="green-service-lead !text-left !text-sm !text-slate-600 md:!text-base"><?php echo esc_html( $description ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( ! empty( $subsections ) ) : ?>
@@ -749,16 +919,16 @@ function green_nb_render_areas_atuacao( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-areas-block relative overflow-hidden">
-		<?php green_nb_render_glow_marks_lite(); ?>
-		<div class="green-container relative z-[1]">
-			<div class="green-areas-intro reveal">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-areas-block relative !bg-white !pb-0 !pt-32">
+		<?php green_nb_render_glow_marks_lite( 'areas' ); ?>
+		<div class="green-container relative z-10">
+			<div class="green-areas-intro reveal !pt-2">
 				<?php if ( '' !== $title ) : ?>
-					<h2 class="green-section-title"><?php echo esc_html( $title ); ?></h2>
+					<h2 class="<?php echo esc_attr( green_nb_section_title_tw( 'on-light' ) . ' !text-left' ); ?>"><?php echo esc_html( $title ); ?></h2>
 				<?php endif; ?>
-				<div class="green-section-divider" aria-hidden="true"></div>
+				<div class="green-section-divider !mx-0 !bg-secondary" aria-hidden="true"></div>
 				<?php if ( '' !== $description ) : ?>
-					<p class="green-section-description"><?php echo esc_html( $description ); ?></p>
+					<p class="green-section-description !text-left !text-slate-600"><?php echo esc_html( $description ); ?></p>
 				<?php endif; ?>
 			</div>
 			<?php if ( ! empty( $services ) ) : ?>
@@ -787,19 +957,20 @@ function green_nb_render_ia_section( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-ia-block relative overflow-hidden">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-ia-block relative !overflow-hidden !bg-primary !pt-0 !pb-16 md:!pb-24">
+		<?php green_nb_print_divider_section_bottom( '#006060', 'bg-white' ); ?>
 		<?php green_nb_render_glow_marks_dark(); ?>
-		<div class="green-container green-ia-grid relative z-[1]">
-			<div class="reveal">
+		<div class="green-container green-ia-grid relative z-10 !items-center !pt-8 md:!pt-10">
+			<div class="reveal !text-left">
 				<?php if ( '' !== $label ) : ?>
-					<p class="green-ia-label"><?php echo esc_html( $label ); ?></p>
+					<p class="green-ia-label !text-secondary"><?php echo esc_html( $label ); ?></p>
 				<?php endif; ?>
 				<?php if ( '' !== $title ) : ?>
-					<h2 class="green-ia-title"><?php echo esc_html( $title ); ?></h2>
+					<h2 class="green-ia-title !text-3xl !font-extrabold !text-white sm:!text-4xl md:!text-5xl"><?php echo esc_html( $title ); ?></h2>
 				<?php endif; ?>
 				<?php foreach ( $paragraphs as $paragraph ) : ?>
 					<?php if ( is_string( $paragraph ) && '' !== trim( $paragraph ) ) : ?>
-						<p class="green-ia-paragraph"><?php echo esc_html( trim( $paragraph ) ); ?></p>
+						<p class="green-ia-paragraph !ml-0 !mr-0 !max-w-3xl"><?php echo esc_html( trim( $paragraph ) ); ?></p>
 					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
@@ -815,7 +986,9 @@ function green_nb_render_ia_section( $attributes ) {
 					?>
 					<article class="<?php echo esc_attr( green_nb_tw( 'ia_feature' ) ); ?>">
 						<?php if ( '' !== $icon ) : ?>
-							<span class="material-symbols-outlined"><?php echo esc_html( $icon ); ?></span>
+							<div class="flex h-14 w-14 shrink-0 items-center justify-center self-start rounded-2xl bg-secondary/20 text-secondary">
+								<span class="material-symbols-outlined !text-3xl"><?php echo esc_html( $icon ); ?></span>
+							</div>
 						<?php endif; ?>
 						<div>
 							<?php if ( '' !== $fh ) : ?>
@@ -829,6 +1002,7 @@ function green_nb_render_ia_section( $attributes ) {
 				<?php endforeach; ?>
 			</div>
 		</div>
+		<?php green_nb_print_divider_section_bottom( '#ffffff' ); ?>
 	</section>
 	<?php
 	return ob_get_clean();
@@ -848,26 +1022,26 @@ function green_nb_render_security_pillars( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-security-block relative overflow-hidden">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-security-block relative !overflow-hidden !bg-background !pb-0 !pt-8">
 		<?php green_nb_render_glow_marks_lite(); ?>
-		<div class="green-container green-security-grid relative z-[1]">
-			<div class="reveal">
+		<div class="green-container green-security-grid relative z-10 !pt-2">
+			<div class="reveal !text-left">
 				<?php if ( '' !== $label ) : ?>
-					<p class="green-security-label"><?php echo esc_html( $label ); ?></p>
+					<p class="green-security-label !text-left !text-secondary"><?php echo esc_html( $label ); ?></p>
 				<?php endif; ?>
 				<?php if ( '' !== $title ) : ?>
-					<h2 class="green-section-title"><?php echo esc_html( $title ); ?></h2>
+					<h2 class="<?php echo esc_attr( green_nb_section_title_tw( 'on-light' ) . ' !text-left' ); ?>"><?php echo esc_html( $title ); ?></h2>
 				<?php endif; ?>
 				<?php if ( '' !== $intro ) : ?>
-					<p class="green-security-intro"><?php echo esc_html( $intro ); ?></p>
+					<p class="green-security-intro !ml-0 !mr-0 !max-w-3xl !text-left"><?php echo esc_html( $intro ); ?></p>
 				<?php endif; ?>
 				<?php foreach ( $paragraphs as $paragraph ) : ?>
 					<?php if ( is_string( $paragraph ) && '' !== trim( $paragraph ) ) : ?>
-						<p class="green-security-paragraph"><?php echo esc_html( trim( $paragraph ) ); ?></p>
+						<p class="green-security-paragraph !ml-0 !mr-0 !max-w-3xl !text-left"><?php echo esc_html( trim( $paragraph ) ); ?></p>
 					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
-			<div class="green-security-pillar-grid reveal">
+			<div class="green-security-pillar-grid reveal !mx-auto !max-w-5xl !justify-items-center !gap-8 md:!gap-10">
 				<?php foreach ( $pillars as $pillar ) : ?>
 					<?php
 					$icon = green_nb_sanitize_text( $pillar['icon'] ?? '' );
@@ -879,13 +1053,15 @@ function green_nb_render_security_pillars( $attributes ) {
 					?>
 					<article class="<?php echo esc_attr( green_nb_tw( 'security_pillar' ) ); ?>">
 						<?php if ( '' !== $icon ) : ?>
-							<span class="material-symbols-outlined"><?php echo esc_html( $icon ); ?></span>
+							<div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-secondary text-white shadow-md shadow-primary/10">
+								<span class="material-symbols-outlined !text-2xl"><?php echo esc_html( $icon ); ?></span>
+							</div>
 						<?php endif; ?>
 						<?php if ( '' !== $pt ) : ?>
-							<h4><?php echo esc_html( $pt ); ?></h4>
+							<h4 class="!text-center !text-base !font-bold !text-primary md:!text-lg"><?php echo esc_html( $pt ); ?></h4>
 						<?php endif; ?>
 						<?php if ( '' !== $pd ) : ?>
-							<p><?php echo esc_html( $pd ); ?></p>
+							<p class="!text-center !text-sm !text-slate-600 md:!text-[0.95rem]"><?php echo esc_html( $pd ); ?></p>
 						<?php endif; ?>
 					</article>
 				<?php endforeach; ?>
@@ -908,14 +1084,15 @@ function green_nb_render_team_grid( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-team-block relative overflow-hidden">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-team-block relative !overflow-hidden !bg-surface !pt-0 !pb-16 md:!pb-20">
+		<?php green_nb_print_divider_section_bottom( 'surface', 'bg-white' ); ?>
 		<?php green_nb_render_glow_marks_lite(); ?>
-		<div class="green-container relative z-[1]">
+		<div class="green-container relative z-10 !pt-8 md:!pt-10">
 			<?php if ( '' !== $title ) : ?>
-				<h2 class="green-section-title green-center reveal"><?php echo esc_html( $title ); ?></h2>
+				<h2 class="reveal <?php echo esc_attr( green_nb_section_title_tw( 'on-light' ) . ' !text-left' ); ?>"><?php echo esc_html( $title ); ?></h2>
 			<?php endif; ?>
 			<?php if ( '' !== $description ) : ?>
-				<p class="green-section-description green-center reveal"><?php echo esc_html( $description ); ?></p>
+				<p class="green-section-description !text-left reveal"><?php echo esc_html( $description ); ?></p>
 			<?php endif; ?>
 			<div class="green-team-grid reveal">
 				<?php foreach ( $members as $member ) : ?>
@@ -984,18 +1161,19 @@ function green_nb_render_contact_section( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-contact-block relative overflow-hidden">
-		<?php green_nb_render_glow_marks_lite(); ?>
-		<div class="green-container relative z-[1]">
-			<div class="<?php echo esc_attr( green_nb_tw( 'contact_card' ) ); ?> reveal">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-contact-block relative !overflow-hidden !bg-primary !pt-0 !pb-16 md:!pb-20">
+		<?php green_nb_print_divider_section_bottom( '#006060', 'bg-surface' ); ?>
+		<?php green_nb_render_glow_marks_lite( 'contact' ); ?>
+		<div class="green-container relative z-10 !pt-8 md:!pt-10">
+			<div class="<?php echo esc_attr( green_nb_tw( 'contact_card' ) ); ?> reveal !mx-auto !max-w-5xl !overflow-hidden">
 				<div>
 					<?php if ( '' !== $title ) : ?>
-						<h2 class="green-contact-title"><?php echo esc_html( $title ); ?></h2>
+						<h2 class="green-contact-title !text-left !text-3xl !font-extrabold !text-primary sm:!text-4xl md:!text-5xl"><?php echo esc_html( $title ); ?></h2>
 					<?php endif; ?>
 					<?php if ( '' !== $description ) : ?>
-						<p class="green-contact-description"><?php echo esc_html( $description ); ?></p>
+						<p class="green-contact-description !text-left !text-slate-600"><?php echo esc_html( $description ); ?></p>
 					<?php endif; ?>
-					<div class="green-contact-list">
+					<div class="green-contact-list !text-left">
 						<?php if ( '' !== $phone_label || '' !== $phone ) : ?>
 							<div>
 								<?php if ( '' !== $phone_label ) : ?><span><?php echo esc_html( $phone_label ); ?></span><?php endif; ?>
@@ -1034,12 +1212,12 @@ function green_nb_render_contact_section( $attributes ) {
 						<?php endif; ?>
 					</div>
 				</div>
-				<div class="green-contact-cta">
+				<div class="green-contact-cta !flex !w-full !items-center !justify-start !pt-2">
 					<?php
 					$wa_label = green_nb_sanitize_text( $wa_text );
 					$wa_link  = green_nb_sanitize_url( $wa_url );
 					if ( '' !== $wa_label && '' !== $wa_link ) {
-						echo '<a class="green-btn green-btn-wa !rounded-full transition-transform duration-200 ease-out hover:scale-105 active:scale-95" href="' . esc_url( $wa_link ) . '">';
+						echo '<a class="green-btn green-btn-wa !inline-flex !items-center !justify-center !gap-3 !rounded-full !border-0 !bg-secondary !px-8 !py-3 !text-[15px] !font-bold !text-white !no-underline !shadow-md !shadow-slate-900/10 transition-transform duration-200 ease-out hover:scale-105 active:scale-95" href="' . esc_url( $wa_link ) . '">';
 						echo green_nb_whatsapp_icon_svg(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo '<span class="green-btn-wa-label">' . esc_html( $wa_label ) . '</span>';
 						echo '</a>';

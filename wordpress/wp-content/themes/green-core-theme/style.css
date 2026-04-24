@@ -4,7 +4,7 @@ Theme URI: https://greenassociados.com.br
 Author: Green Associados
 Author URI: https://greenassociados.com.br
 Description: Tema proprietário leve, headless-ready e orientado a blocos nativos.
-Version: 1.1.9
+Version: 1.2.0
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 8.1
@@ -12,19 +12,19 @@ Text Domain: green-core-theme
 */
 
 :root {
-	--green-primary: #005646;
-	--green-primary-container: #00715c;
-	--green-secondary: #006b57;
-	--green-secondary-fixed: #42fdd3;
-	--green-secondary-fixed-dim: #00e0b8;
-	--green-tertiary: #7d3714;
-	--green-tertiary-fixed: #ffdbcd;
-	--green-surface: #fcf9f7;
-	--green-surface-low: #f6f3f1;
-	--green-surface-high: #eae8e6;
-	--green-on-surface: #1b1c1b;
-	--green-on-surface-variant: #3e4945;
-	--green-outline: #6e7a75;
+	--green-primary: #006060;
+	--green-primary-container: #0a7a7a;
+	--green-secondary: #00b4d8;
+	--green-secondary-fixed: #33c4e0;
+	--green-secondary-fixed-dim: #006060;
+	--green-tertiary: #1e293b;
+	--green-tertiary-fixed: #e2e8f0;
+	--green-surface: #ffffff;
+	--green-surface-low: #f8fafc;
+	--green-surface-high: #e2e8f0;
+	--green-on-surface: #1e293b;
+	--green-on-surface-variant: #475569;
+	--green-outline: #94a3b8;
 	--green-container-max: 1200px;
 	--green-gutter: clamp(16px, 4vw, 32px);
 	--green-header-height: 72px;

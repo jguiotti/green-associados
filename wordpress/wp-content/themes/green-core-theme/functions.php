@@ -118,7 +118,16 @@ function green_core_theme_enqueue_tailwind() {
 		'3.4.1',
 		false
 	);
-	$config = 'tailwind.config = { theme: { extend: { colors: { "brand-forest": "#005646", "brand-mint": "#42fdd3" } } } };';
+	// primary = verde-água profundo (referência «Conecta»), não verde-bandeira.
+	$config = 'tailwind.config = { theme: { extend: { colors: {'
+		. 'primary: "#006060",'
+		. 'secondary: "#00B4D8",'
+		. 'tertiary: "#2C3E50",'
+		. 'background: "#FFFFFF",'
+		. 'surface: "#FAFAF7",'
+		. '"brand-forest": "#006060",'
+		. '"brand-mint": "#00B4D8"'
+		. '} } } };';
 	wp_add_inline_script( 'green-core-tailwind', $config, 'after' );
 }
 add_action( 'wp_enqueue_scripts', 'green_core_theme_enqueue_tailwind', 1 );
