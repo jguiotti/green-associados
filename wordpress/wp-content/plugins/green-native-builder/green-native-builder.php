@@ -350,7 +350,7 @@ function green_nb_register_assets() {
 	wp_register_script(
 		'green-native-builder-blocks',
 		green_nb_asset_url( 'assets/js/blocks.js' ),
-		array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
+		array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-data', 'wp-core-data' ),
 		$ver_js,
 		true
 	);
@@ -1297,12 +1297,15 @@ function green_nb_render_contact_section( $attributes ) {
 							<div>
 								<?php if ( '' !== $phone_label ) : ?><span><?php echo esc_html( $phone_label ); ?></span><?php endif; ?>
 								<?php if ( '' !== $phone ) : ?>
-									<p>
+									<p class="green-contact-line green-contact-line--phone">
+										<span class="material-symbols-outlined green-contact-line__icon" aria-hidden="true">call</span>
+										<span class="green-contact-line__text">
 										<?php if ( '' !== $phone_href ) : ?>
 											<a class="green-contact-link green-contact-link--phone" href="<?php echo esc_url( $phone_href ); ?>"><?php echo esc_html( $phone ); ?></a>
 										<?php else : ?>
 											<?php echo esc_html( $phone ); ?>
 										<?php endif; ?>
+										</span>
 									</p>
 								<?php endif; ?>
 							</div>
@@ -1311,12 +1314,15 @@ function green_nb_render_contact_section( $attributes ) {
 							<div>
 								<?php if ( '' !== $email_label ) : ?><span><?php echo esc_html( $email_label ); ?></span><?php endif; ?>
 								<?php if ( '' !== $email ) : ?>
-									<p>
+									<p class="green-contact-line green-contact-line--email">
+										<span class="material-symbols-outlined green-contact-line__icon" aria-hidden="true">mail</span>
+										<span class="green-contact-line__text">
 										<?php if ( '' !== $email_href ) : ?>
 											<a class="green-contact-link green-contact-link--email" href="<?php echo esc_url( $email_href ); ?>"><?php echo esc_html( $email ); ?></a>
 										<?php else : ?>
 											<?php echo esc_html( $email ); ?>
 										<?php endif; ?>
+										</span>
 									</p>
 								<?php endif; ?>
 							</div>

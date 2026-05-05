@@ -31,6 +31,55 @@
 		return Array.isArray( arr ) && arr.length ? arr.join( '\n' ) : '';
 	}
 
+	function appendUniqueMediaIdsToCarousel( existingIds, selected ) {
+		const raw = Array.isArray( selected ) ? selected : selected ? [ selected ] : [];
+		const next = existingIds.slice();
+		const seen = new Set(
+			next
+				.map( ( id ) => parseInt( id, 10 ) )
+				.filter( ( id ) => id > 0 )
+		);
+		raw.forEach( ( media ) => {
+			const mid = media && media.id ? parseInt( media.id, 10 ) : 0;
+			if ( mid > 0 && ! seen.has( mid ) ) {
+				seen.add( mid );
+				next.push( mid );
+			}
+		} );
+		return next;
+	}
+
+	function replaceCarouselMediaOrder( selected ) {
+		const raw = Array.isArray( selected ) ? selected : selected ? [ selected ] : [];
+		const mapped = raw
+			.map( ( m ) => ( m && m.id ? parseInt( m.id, 10 ) : 0 ) )
+			.filter( ( id ) => id > 0 );
+		const seen = new Set();
+		return mapped.filter( ( id ) => {
+			if ( seen.has( id ) ) {
+				return false;
+			}
+			seen.add( id );
+			return true;
+		} );
+	}
+
+	function moveCarouselId( ids, index, delta ) {
+		const ni = index + delta;
+		if ( ni < 0 || ni >= ids.length ) {
+			return ids;
+		}
+		const out = ids.slice();
+		const swap = out[ ni ];
+		out[ ni ] = out[ index ];
+		out[ index ] = swap;
+		return out;
+	}
+
+	function removeCarouselIdAt( ids, index ) {
+		return ids.filter( ( _, j ) => j !== index );
+	}
+
 	function repeaterControls( label, items, fields, onChange, onAdd, addLabel ) {
 		return el(
 			PanelBody,
@@ -71,6 +120,122 @@
 
 	function dynamicSave() {
 		return null;
+	}
+
+	function GreenNbHeroCarouselOrderUI( props ) {
+		const listIds = ( props.ids || [] ).map( ( id ) => parseInt( id, 10 ) ).filter( ( id ) => id > 0 );
+		const setAttributes = props.setAttributes;
+		const depKey = listIds.join( '|' );
+		const urls = wp.data.useSelect(
+			function ( select ) {
+				const core = select( 'core' );
+				return listIds.map( function ( imageId ) {
+					const media = typeof core.getMedia === 'function' ? core.getMedia( imageId ) : null;
+					return media && media.source_url ? media.source_url : '';
+				} );
+			},
+			[ depKey ]
+		);
+
+		return el(
+			'div',
+			{ className: 'green-nb-hero-carousel-order', style: { marginTop: '12px' } },
+			listIds.length
+				? listIds.map( function ( imageId, index ) {
+					const src = urls && urls[ index ] ? urls[ index ] : '';
+					return el(
+						'div',
+						{
+							key: 'hero-carousel-item-' + imageId,
+							style: {
+								display: 'flex',
+								alignItems: 'center',
+								gap: '8px',
+								marginBottom: '8px',
+								padding: '6px 8px',
+								border: '1px solid #dcdcde',
+								borderRadius: '4px',
+								background: '#f6f7f7',
+							},
+						},
+						el(
+							'span',
+							{
+								style: {
+									width: '22px',
+									textAlign: 'center',
+									fontSize: '12px',
+									fontWeight: 700,
+									color: '#50575e',
+								},
+							},
+							String( index + 1 )
+						),
+						src
+							? el( 'img', {
+								alt: '',
+								src: src,
+								style: {
+									width: '40px',
+									height: '40px',
+									objectFit: 'cover',
+									borderRadius: '4px',
+									flexShrink: 0,
+								},
+							} )
+							: el(
+								'span',
+								{
+									style: {
+										width: '40px',
+										height: '40px',
+										background: '#ddd',
+										flexShrink: 0,
+										borderRadius: '4px',
+										fontSize: '10px',
+									},
+								},
+								'…'
+							),
+						el( Button, {
+							isSmall: true,
+							disabled: index === 0,
+							onClick: function () {
+								setAttributes( { backgroundImageIds: moveCarouselId( listIds, index, -1 ) } );
+							},
+						}, '↑' ),
+						el( Button, {
+							isSmall: true,
+							disabled: index >= listIds.length - 1,
+							onClick: function () {
+								setAttributes( { backgroundImageIds: moveCarouselId( listIds, index, 1 ) } );
+							},
+						}, '↓' ),
+						el( Button, {
+							isSmall: true,
+							isDestructive: true,
+							variant: 'tertiary',
+							onClick: function () {
+								setAttributes( { backgroundImageIds: removeCarouselIdAt( listIds, index ) } );
+							},
+						}, __( 'Remover', 'green-native-builder' ) )
+					);
+				  } )
+				: el(
+					'p',
+					{
+						className: 'components-base-control__help',
+						style: { margin: 0, fontStyle: 'italic' },
+					},
+					__( 'Nenhuma imagem ainda. Use os botões da biblioteca acima.', 'green-native-builder' )
+				)
+		);
+	}
+
+	function firstUrlFromMediaSelection( selected ) {
+		const list = Array.isArray( selected ) ? selected : selected ? [ selected ] : [];
+		const m = list[ 0 ];
+		return m && m.url ? String( m.url ) : '';
 	}
 
 	function getSiteHeaderMenuOptions() {
@@ -253,39 +418,69 @@
 							el(
 								Fragment,
 								null,
-								el( MediaUploadCheck, null, el( MediaUpload, {
-									onSelect: ( selected ) => {
-										const list = Array.isArray( selected )
-											? selected
-											: selected
-												? [ selected ]
-												: [];
-										const newIds = list.map( ( m ) => m && m.id ).filter( Boolean );
-										setAttributes( {
-											backgroundImageIds: newIds,
-											backgroundUrl: list[ 0 ]?.url || attributes.backgroundUrl || '',
-										} );
-									},
-									allowedTypes: [ 'image' ],
-									multiple: true,
-									value: ids.filter( Boolean ),
-									render: ( { open } ) =>
-										el(
-											Button,
-											{ onClick: open, variant: 'secondary' },
-											ids.length
-												? sprintf(
-													/* translators: %d: number of images selected */
-													__( 'Escolher imagens (%d)', 'green-native-builder' ),
-													ids.length
-												)
-												: __( 'Adicionar imagens ao carrossel', 'green-native-builder' )
-										),
-								} ) ),
+								el(
+									'div',
+									{ className: 'green-nb-hero-carousel-actions', style: { display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' } },
+									el( MediaUploadCheck, null, el( MediaUpload, {
+										onSelect: ( selected ) => {
+											const nextIds = appendUniqueMediaIdsToCarousel( ids, selected );
+											const fu = firstUrlFromMediaSelection( selected );
+											setAttributes( {
+												backgroundImageIds: nextIds,
+												backgroundUrl: fu || attributes.backgroundUrl || '',
+											} );
+										},
+										allowedTypes: [ 'image' ],
+										multiple: true,
+										gallery: true,
+										value: ids.filter( Boolean ),
+										render: ( { open } ) =>
+											el(
+												Button,
+												{ onClick: open, variant: 'secondary' },
+												__( 'Adicionar imagens (mantém as atuais)', 'green-native-builder' )
+											),
+									} ) ),
+									el( MediaUploadCheck, null, el( MediaUpload, {
+										onSelect: ( selected ) => {
+											const nextIds = replaceCarouselMediaOrder( selected );
+											setAttributes( {
+												backgroundImageIds: nextIds,
+												backgroundUrl: firstUrlFromMediaSelection( selected ) || attributes.backgroundUrl || '',
+											} );
+										},
+										allowedTypes: [ 'image' ],
+										multiple: true,
+										gallery: true,
+										value: ids.filter( Boolean ),
+										render: ( { open } ) =>
+											el(
+												Button,
+												{ onClick: open, variant: 'secondary' },
+												__( 'Substituir todas e definir ordem', 'green-native-builder' )
+											),
+									} ) )
+								),
+								el( Button, {
+									variant: 'link',
+									disabled: ids.length === 0,
+									onClick: () =>
+										setAttributes( { backgroundImageIds: [], backgroundUrl: '' } ),
+								}, __( 'Limpar lista', 'green-native-builder' ) ),
 								el(
 									'p',
 									{ className: 'components-base-control__help', style: { marginTop: '8px' } },
-									__( 'Selecione pelo menos duas imagens. Transição suave sem setas nem pontos.', 'green-native-builder' )
+									__( 'Na biblioteca: Cmd (Mac) ou Ctrl (Windows) + clique para escolher várias imagens não seguidas; ou abra «Adicionar» várias vezes. A ordem em «Substituir todas» segue a seleção no modal.', 'green-native-builder' )
+								),
+								el( GreenNbHeroCarouselOrderUI, { ids, setAttributes } ),
+								el(
+									'p',
+									{ className: 'components-base-control__help', style: { marginTop: '8px' } },
+									sprintf(
+										/* translators: %d: number of slides */
+										__( '%d imagem(ns) no carrossel. Mínimo 2 para rodar no site.', 'green-native-builder' ),
+										ids.filter( Boolean ).length
+									)
 								),
 								el( RangeControl, {
 									label: __( 'Intervalo entre imagens (segundos)', 'green-native-builder' ),

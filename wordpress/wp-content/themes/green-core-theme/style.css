@@ -4,7 +4,7 @@ Theme URI: https://greenassociados.com.br
 Author: Green Associados
 Author URI: https://greenassociados.com.br
 Description: Tema proprietário leve, headless-ready e orientado a blocos nativos.
-Version: 1.2.2
+Version: 1.2.3
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 8.1
@@ -670,9 +670,19 @@ body.green-nav-is-open {
 	display: block;
 }
 
-/* Termos / Privacidade: títulos e listas mais legíveis. */
+/* Termos / Privacidade: título principal da página (above the_fold, PT/EN). */
+body.green-is-legal-page .green-site-main .green-page-inner > h1 {
+	font-size: clamp(2.5rem, 5.8vw, 4rem);
+	font-weight: 700;
+	line-height: 1.18;
+	letter-spacing: -0.03em;
+	margin-bottom: 2.25rem;
+	color: #0f172a;
+}
+
+/* Termos / Privacidade: h1 dentro do conteúdo (se existir segundo título no bloco). */
 body.green-is-legal-page .green-site-main .entry-content h1 {
-	font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+	font-size: clamp(2.1rem, 4.2vw, 3rem);
 	font-weight: 700;
 	line-height: 1.25;
 	margin-bottom: 1.75rem;
@@ -680,15 +690,15 @@ body.green-is-legal-page .green-site-main .entry-content h1 {
 
 body.green-is-legal-page .green-site-main .entry-content h2,
 body.green-is-legal-page .green-site-main .entry-content h3 {
-	font-size: clamp(1.125rem, 2vw, 1.375rem);
-	font-weight: 700;
+	font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+	font-weight: 800;
 	margin-top: 2rem;
 	margin-bottom: 0.85rem;
 }
 
 body.green-is-legal-page .green-site-main .entry-content ol > li {
-	font-weight: 700;
-	font-size: 1.05rem;
+	font-weight: 800;
+	font-size: clamp(1.2rem, 2.2vw, 1.45rem);
 	line-height: 1.65;
 	margin-bottom: 0.85rem;
 }

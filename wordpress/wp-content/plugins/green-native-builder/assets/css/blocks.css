@@ -57,10 +57,10 @@
 	z-index: 3;
 	background: linear-gradient(
 		95deg,
-		rgba(0, 96, 96, 0.98) 0%,
-		rgba(0, 96, 96, 0.94) 38%,
-		rgba(0, 40, 40, 0.88) 72%,
-		rgba(0, 20, 20, 0.72) 100%
+		rgba(0, 96, 96, 0.88) 0%,
+		rgba(0, 96, 96, 0.78) 38%,
+		rgba(0, 40, 40, 0.66) 72%,
+		rgba(0, 20, 20, 0.5) 100%
 	);
 }
 
@@ -70,7 +70,7 @@
 	inset: 0;
 	z-index: 4;
 	pointer-events: none;
-	background: rgba(0, 0, 0, 0.42);
+	background: rgba(0, 0, 0, 0.28);
 }
 
 .green-hero-content {
@@ -869,7 +869,41 @@
 	color: #1e293b;
 }
 
-.green-contact-list .green-contact-link {
+.green-contact-line {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.green-contact-list p.green-contact-line {
+	font-size: clamp(1.3125rem, 1vw + 1.05rem, 1.625rem);
+	font-weight: 500;
+	line-height: 1.38;
+	color: #1e293b;
+}
+
+.green-contact-line__icon.material-symbols-outlined {
+	font-size: 26px;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: #006060;
+	flex-shrink: 0;
+	align-self: center;
+	font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.green-contact-line__text {
+	min-width: 0;
+	flex: 1;
+	display: flex;
+	align-items: center;
+}
+
+.green-contact-list p.green-contact-line .green-contact-link {
+	font-size: inherit;
+	vertical-align: middle;
 	color: #006060;
 	text-decoration: underline;
 	text-decoration-color: rgba(0, 96, 96, 0.35);
@@ -1052,6 +1086,10 @@ main.green-site-main > .green-section:not(.green-in-view) {
 
 	.green-contact-list p {
 		font-size: 17px;
+	}
+
+	.green-contact-list p.green-contact-line {
+		font-size: clamp(1.0625rem, 2vw, 1.25rem);
 	}
 }
 
