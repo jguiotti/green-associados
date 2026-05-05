@@ -166,6 +166,43 @@ function green_core_theme_body_class_legal_page( $classes ) {
 add_filter( 'body_class', 'green_core_theme_body_class_legal_page' );
 
 /**
+ * URL da página inicial alinhada ao cabeçalho (Polylang: home por idioma; idem a home_url('/')).
+ *
+ * @return string URL absolute com barra final.
+ */
+function green_core_theme_logo_home_url() {
+	if ( function_exists( 'pll_home_url' ) ) {
+		$url = pll_home_url();
+		if ( is_string( $url ) && '' !== $url ) {
+			return trailingslashit( esc_url_raw( $url ) );
+		}
+	}
+	return trailingslashit( home_url( '/' ) );
+}
+
+/**
+ * O bloco Site Logo e get_custom_logo() devem apontar para a mesma home que o logo do header (evita link absoluto antigo ou resolução errada de '/').
+ *
+ * @param string $html Markup do logo.
+ * @return string
+ */
+function green_core_theme_filter_custom_logo_home_href( $html ) {
+	if ( ! is_string( $html ) || '' === $html || false === strpos( $html, '<a' ) ) {
+		return $html;
+	}
+	$home = green_core_theme_logo_home_url();
+	if ( class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		$p = new WP_HTML_Tag_Processor( $html );
+		if ( $p->next_tag( array( 'tag_name' => 'A' ) ) ) {
+			$p->set_attribute( 'href', esc_url( $home ) );
+		}
+		return $p->get_updated_html();
+	}
+	return preg_replace( '/(<a\s[^>]*\bhref=")([^"]*)(")/', '$1' . esc_url( $home ) . '$3', $html, 1 );
+}
+add_filter( 'get_custom_logo', 'green_core_theme_filter_custom_logo_home_href', 99 );
+
+/**
  * Garante que o CSS da 1.ª coluna do rodapé (logo + slogan) aplique depois dos estilos globais dos blocos.
  * Sem isto, regras do core / estilos globais podem carregar a seguir e anular o tema (havia «zero» efeito no browser).
  */

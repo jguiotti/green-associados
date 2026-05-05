@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Yoast SEO &#8211; Advanced SEO with real-time guidance and built-in AI - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-15 07:55:32+0000\n"
+"PO-Revision-Date: 2026-04-28 08:57:10+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2996,6 +2996,7 @@ msgid "By the way, did you know we also have a %1$sPremium plugin%2$s? It offers
 msgstr "A propósito, sabia que também temos um %1$sPlugin Premium%2$s? Ele oferece recursos avançados, como um gerenciador de redirecionamentos e suporte para várias frases-chave na mesma página. Também inclui suporte 24h por dia."
 
 #: admin/class-bulk-editor-list-table.php:829
+#: src/abilities/application/score-retriever.php:165
 msgid "(no title)"
 msgstr "(sem título)"
 
@@ -3183,9 +3184,10 @@ msgstr "Detectamos os seguintes problemas que afetam o SEO de seu site."
 msgid "Problems"
 msgstr "Problemas"
 
-#: inc/class-wpseo-rank.php:138 js/dist/block-editor.js:498
-#: js/dist/editor-modules.js:115 js/dist/editor-modules.js:384
-#: js/dist/externals-components.js:122
+#: inc/class-wpseo-rank.php:138
+#: src/abilities/application/score-retriever.php:140
+#: js/dist/block-editor.js:498 js/dist/editor-modules.js:115
+#: js/dist/editor-modules.js:384 js/dist/externals-components.js:122
 #: js/dist/frontend-inspector-resources.js:1
 msgid "Not available"
 msgstr "Não disponível"
@@ -3311,6 +3313,7 @@ msgstr "A primeira verdadeira solução completa de SEO para o WordPress, inclui
 
 #. Plugin Name of the plugin
 #: wp-seo.php admin/capabilities/class-capability-manager-integration.php:74
+#: src/abilities/user-interface/ability-categories-integration.php:43
 #: src/presenters/meta-description-presenter.php:36 js/dist/block-editor.js:577
 msgid "Yoast SEO"
 msgstr "Yoast SEO"

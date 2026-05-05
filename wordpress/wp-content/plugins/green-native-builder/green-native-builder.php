@@ -27,6 +27,63 @@ function green_nb_sanitize_url( $value ) {
 }
 
 /**
+ * Resolve URLs do fundo do Hero: imagem única vs carrossel (medias na biblioteca).
+ *
+ * @param array<string,mixed> $attributes Atributos do bloco.
+ * @return array{mode:string,urls:string[],carousel:bool}
+ */
+function green_nb_resolve_hero_backgrounds( $attributes ) {
+	$mode = ( isset( $attributes['backgroundMode'] ) && 'carousel' === $attributes['backgroundMode'] ) ? 'carousel' : 'single';
+	$ids  = isset( $attributes['backgroundImageIds'] ) && is_array( $attributes['backgroundImageIds'] )
+		? array_values( array_filter( array_map( 'absint', $attributes['backgroundImageIds'] ) ) )
+		: array();
+	$url_fallback = green_nb_sanitize_url( $attributes['backgroundUrl'] ?? '' );
+
+	if ( 'carousel' === $mode && count( $ids ) >= 2 ) {
+		$urls = array();
+		foreach ( $ids as $id ) {
+			$u = wp_get_attachment_image_url( $id, 'full' );
+			if ( $u ) {
+				$urls[] = esc_url_raw( $u );
+			}
+		}
+		if ( count( $urls ) >= 2 ) {
+			return array(
+				'mode'          => 'carousel',
+				'urls'          => $urls,
+				'carousel'      => true,
+			);
+		}
+	}
+
+	if ( count( $ids ) > 0 && ! empty( $ids[0] ) ) {
+		$u = wp_get_attachment_image_url( $ids[0], 'full' );
+		if ( $u ) {
+			$u = esc_url_raw( $u );
+			return array(
+				'mode'     => 'single',
+				'urls'     => array( $u ),
+				'carousel' => false,
+			);
+		}
+	}
+
+	if ( '' !== $url_fallback ) {
+		return array(
+			'mode'     => 'single',
+			'urls'     => array( $url_fallback ),
+			'carousel' => false,
+		);
+	}
+
+	return array(
+		'mode'     => 'single',
+		'urls'     => array(),
+		'carousel' => false,
+	);
+}
+
+/**
  * Constrói o href `tel:` a partir do texto do telefone guardado no bloco (dígitos; acrescenta +55 se faltar DDI em números BR).
  *
  * @param string $phone Texto do campo telefone.
@@ -288,12 +345,21 @@ function green_nb_blocks_asset_version( $file_rel ) {
 function green_nb_register_assets() {
 	$ver_js  = green_nb_blocks_asset_version( 'assets/js/blocks.js' );
 	$ver_css = green_nb_blocks_asset_version( 'assets/css/blocks.css' );
+	$ver_hero_carousel = green_nb_blocks_asset_version( 'assets/js/hero-carousel.js' );
 
 	wp_register_script(
 		'green-native-builder-blocks',
 		green_nb_asset_url( 'assets/js/blocks.js' ),
 		array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
 		$ver_js,
+		true
+	);
+
+	wp_register_script(
+		'green-nb-hero-carousel',
+		green_nb_asset_url( 'assets/js/hero-carousel.js' ),
+		array(),
+		$ver_hero_carousel,
 		true
 	);
 
@@ -380,6 +446,10 @@ function green_nb_register_blocks() {
 			array(
 				'attributes'      => array(
 					'backgroundUrl'        => array( 'type' => 'string', 'default' => '' ),
+					'backgroundMode'       => array( 'type' => 'string', 'default' => 'single' ),
+					'backgroundImageIds'   => array( 'type' => 'array', 'default' => array() ),
+					'carouselIntervalMs'   => array( 'type' => 'number', 'default' => 7000 ),
+					'carouselFadeMs'       => array( 'type' => 'number', 'default' => 1200 ),
 					'badge'                => array( 'type' => 'string', 'default' => 'TRADUÇÕES CORPORATIVAS DE ALTO NÍVEL' ),
 					'title'                => array( 'type' => 'string', 'default' => '' ),
 					'subtitle'             => array( 'type' => 'string', 'default' => '' ),
@@ -619,7 +689,7 @@ function green_nb_render_site_header( $attributes ) {
 	?>
 	<div class="green-header-inner green-header-inner--block" style="<?php echo esc_attr( $style ); ?>">
 		<div class="green-header-logo">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="green-header-logo-link" aria-label="<?php esc_attr_e( 'Página inicial', 'green-core-theme' ); ?>">
+			<a href="<?php echo esc_url( function_exists( 'green_core_theme_logo_home_url' ) ? green_core_theme_logo_home_url() : home_url( '/' ) ); ?>" class="green-header-logo-link" aria-label="<?php esc_attr_e( 'Página inicial', 'green-core-theme' ); ?>">
 				<?php
 				if ( $logo_id > 0 ) {
 					echo wp_get_attachment_image(
@@ -675,11 +745,22 @@ function green_nb_render_site_header( $attributes ) {
 }
 
 function green_nb_render_hero_banner( $attributes ) {
-	$section_id = green_nb_get_section_id( $attributes, '' );
-	$background = green_nb_sanitize_url( $attributes['backgroundUrl'] ?? '' );
-	$badge      = green_nb_sanitize_text( $attributes['badge'] ?? '' );
-	$title      = green_nb_sanitize_text( $attributes['title'] ?? '' );
-	$subtitle   = green_nb_sanitize_text( $attributes['subtitle'] ?? '' );
+	$section_id     = green_nb_get_section_id( $attributes, '' );
+	$bg_data        = green_nb_resolve_hero_backgrounds( $attributes );
+	$is_carousel    = ! empty( $bg_data['carousel'] ) && count( $bg_data['urls'] ) >= 2;
+	$interval_raw   = isset( $attributes['carouselIntervalMs'] ) ? (int) $attributes['carouselIntervalMs'] : 7000;
+	$fade_raw       = isset( $attributes['carouselFadeMs'] ) ? (int) $attributes['carouselFadeMs'] : 1200;
+	$interval_ms    = min( 60000, max( 3500, $interval_raw ) );
+	$fade_ms        = min( 4000, max( 400, $fade_raw ) );
+
+	$background = '';
+	if ( ! empty( $bg_data['urls'][0] ) ) {
+		$background = esc_url( $bg_data['urls'][0] );
+	}
+
+	$badge    = green_nb_sanitize_text( $attributes['badge'] ?? '' );
+	$title    = green_nb_sanitize_text( $attributes['title'] ?? '' );
+	$subtitle = green_nb_sanitize_text( $attributes['subtitle'] ?? '' );
 
 	$primary_button = green_nb_render_link_button(
 		$attributes['primaryButtonText'] ?? '',
@@ -692,9 +773,54 @@ function green_nb_render_hero_banner( $attributes ) {
 		'green-btn !border-2 !border-white/50 !bg-white/5 !text-white !backdrop-blur-sm hover:!border-white/80 hover:!bg-white/10'
 	);
 
+	if ( $is_carousel ) {
+		wp_enqueue_script( 'green-nb-hero-carousel' );
+	}
+
+	$slides_json = '';
+	if ( $is_carousel ) {
+		$slides_json = wp_json_encode( $bg_data['urls'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+	}
+
 	ob_start();
 	?>
 	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-hero-block relative overflow-hidden">
+		<?php if ( $is_carousel && '' !== $slides_json ) : ?>
+		<div
+			class="green-hero-bg green-hero-bg--carousel relative"
+			data-slides="<?php echo esc_attr( $slides_json ); ?>"
+			data-interval="<?php echo esc_attr( (string) $interval_ms ); ?>"
+			data-fade="<?php echo esc_attr( (string) $fade_ms ); ?>"
+			style="--green-hero-fade:<?php echo esc_attr( (string) $fade_ms ); ?>ms"
+		>
+			<div class="green-hero-slides" aria-hidden="true">
+				<div class="green-hero-slide green-hero-slide--a" style="background-image:url('<?php echo esc_url( $bg_data['urls'][0] ); ?>')"></div>
+				<div class="green-hero-slide green-hero-slide--b" style="background-image:url('<?php echo esc_url( $bg_data['urls'][1] ); ?>')"></div>
+			</div>
+			<div class="green-hero-overlay" aria-hidden="true"></div>
+			<div class="green-hero-dim" aria-hidden="true"></div>
+			<div class="mx-auto w-full max-w-[1200px] px-6 md:px-8 relative z-10 green-hero-content">
+				<div class="green-hero-inner">
+					<?php if ( '' !== $badge ) : ?>
+						<span class="green-hero-badge !border !border-white/20 !bg-secondary/20 !text-white"><?php echo esc_html( $badge ); ?></span>
+					<?php endif; ?>
+					<?php if ( '' !== $title ) : ?>
+						<h1 class="green-hero-title"><?php echo esc_html( $title ); ?></h1>
+					<?php endif; ?>
+					<?php if ( '' !== $subtitle ) : ?>
+						<p class="green-hero-subtitle"><?php echo esc_html( $subtitle ); ?></p>
+					<?php endif; ?>
+					<?php if ( '' !== $primary_button || '' !== $secondary_button ) : ?>
+						<div class="green-hero-actions">
+							<?php echo wp_kses_post( $primary_button ); ?>
+							<?php echo wp_kses_post( $secondary_button ); ?>
+						</div>
+					<?php endif; ?>
+					</div>
+				</div>
+			<?php green_nb_print_divider_hero_bottom(); ?>
+		</div>
+		<?php else : ?>
 		<div class="green-hero-bg relative"<?php echo $background ? ' style="background-image:url(' . esc_url( $background ) . ');"' : ''; ?>>
 			<div class="green-hero-overlay" aria-hidden="true"></div>
 			<div class="green-hero-dim" aria-hidden="true"></div>
@@ -719,6 +845,7 @@ function green_nb_render_hero_banner( $attributes ) {
 				</div>
 			<?php green_nb_print_divider_hero_bottom(); ?>
 		</div>
+		<?php endif; ?>
 	</section>
 	<?php
 	return ob_get_clean();

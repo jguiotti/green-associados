@@ -1,5 +1,5 @@
 ( function ( wp ) {
-	const { __ } = wp.i18n;
+	const { __, sprintf } = wp.i18n;
 	const { registerBlockType } = wp.blocks;
 	const { createElement: el, Fragment } = wp.element;
 	const { InspectorControls, MediaUpload, MediaUploadCheck, URLInputButton } = wp.blockEditor;
@@ -181,6 +181,10 @@
 		},
 		attributes: {
 			backgroundUrl: { type: 'string', default: '' },
+			backgroundMode: { type: 'string', default: 'single' },
+			backgroundImageIds: { type: 'array', default: [] },
+			carouselIntervalMs: { type: 'number', default: 7000 },
+			carouselFadeMs: { type: 'number', default: 1200 },
 			badge: { type: 'string', default: 'TRADUÇÕES CORPORATIVAS DE ALTO NÍVEL' },
 			title: { type: 'string', default: '' },
 			subtitle: { type: 'string', default: '' },
@@ -189,8 +193,22 @@
 			secondaryButtonText: { type: 'string', default: '' },
 			secondaryButtonUrl: { type: 'string', default: '' },
 		},
-		edit: ( { attributes, setAttributes } ) =>
-			el(
+		edit: ( { attributes, setAttributes } ) => {
+			const mode = attributes.backgroundMode === 'carousel' ? 'carousel' : 'single';
+			const ids = Array.isArray( attributes.backgroundImageIds ) ? attributes.backgroundImageIds : [];
+
+			const onModeChange = ( next ) => {
+				if ( next === 'single' && ids.length > 1 ) {
+					setAttributes( {
+						backgroundMode: 'single',
+						backgroundImageIds: ids.length ? [ ids[ 0 ] ] : [],
+					} );
+				} else {
+					setAttributes( { backgroundMode: next } );
+				}
+			};
+
+			return el(
 				Fragment,
 				null,
 				el(
@@ -199,18 +217,95 @@
 					el(
 						PanelBody,
 						{ title: __( 'Imagem de fundo', 'green-native-builder' ), initialOpen: true },
-						el( MediaUploadCheck, null, el( MediaUpload, {
-							onSelect: ( media ) => setAttributes( { backgroundUrl: media?.url || '' } ),
-							allowedTypes: [ 'image' ],
-							render: ( { open } ) =>
+						el( SelectControl, {
+							label: __( 'Modo do fundo', 'green-native-builder' ),
+							value: mode,
+							options: [
+								{ label: __( 'Imagem única', 'green-native-builder' ), value: 'single' },
+								{ label: __( 'Carrossel automático (várias imagens)', 'green-native-builder' ), value: 'carousel' },
+							],
+							onChange: onModeChange,
+						} ),
+						mode === 'single' &&
+							el( MediaUploadCheck, null, el( MediaUpload, {
+								onSelect: ( media ) => {
+									if ( ! media || ! media.id ) {
+										setAttributes( { backgroundImageIds: [], backgroundUrl: '' } );
+										return;
+									}
+									setAttributes( {
+										backgroundImageIds: [ media.id ],
+										backgroundUrl: media.url || '',
+									} );
+								},
+								allowedTypes: [ 'image' ],
+								value: ids[ 0 ],
+								render: ( { open } ) =>
+									el(
+										Button,
+										{ onClick: open, variant: 'secondary' },
+										attributes.backgroundUrl
+											? __( 'Trocar imagem', 'green-native-builder' )
+											: __( 'Selecionar imagem (biblioteca)', 'green-native-builder' )
+									),
+							} ) ),
+						mode === 'carousel' &&
+							el(
+								Fragment,
+								null,
+								el( MediaUploadCheck, null, el( MediaUpload, {
+									onSelect: ( selected ) => {
+										const list = Array.isArray( selected )
+											? selected
+											: selected
+												? [ selected ]
+												: [];
+										const newIds = list.map( ( m ) => m && m.id ).filter( Boolean );
+										setAttributes( {
+											backgroundImageIds: newIds,
+											backgroundUrl: list[ 0 ]?.url || attributes.backgroundUrl || '',
+										} );
+									},
+									allowedTypes: [ 'image' ],
+									multiple: true,
+									value: ids.filter( Boolean ),
+									render: ( { open } ) =>
+										el(
+											Button,
+											{ onClick: open, variant: 'secondary' },
+											ids.length
+												? sprintf(
+													/* translators: %d: number of images selected */
+													__( 'Escolher imagens (%d)', 'green-native-builder' ),
+													ids.length
+												)
+												: __( 'Adicionar imagens ao carrossel', 'green-native-builder' )
+										),
+								} ) ),
 								el(
-									Button,
-									{ onClick: open, variant: 'secondary' },
-									attributes.backgroundUrl
-										? __( 'Trocar imagem', 'green-native-builder' )
-										: __( 'Selecionar imagem', 'green-native-builder' )
+									'p',
+									{ className: 'components-base-control__help', style: { marginTop: '8px' } },
+									__( 'Selecione pelo menos duas imagens. Transição suave sem setas nem pontos.', 'green-native-builder' )
 								),
-						} ) )
+								el( RangeControl, {
+									label: __( 'Intervalo entre imagens (segundos)', 'green-native-builder' ),
+									value: Math.round( ( attributes.carouselIntervalMs || 7000 ) / 1000 ),
+									onChange: ( sec ) =>
+										setAttributes( { carouselIntervalMs: Math.min( 60, Math.max( 4, sec ) ) * 1000 } ),
+									min: 4,
+									max: 60,
+									step: 1,
+								} ),
+								el( RangeControl, {
+									label: __( 'Duração do esfumaçado (ms)', 'green-native-builder' ),
+									value: attributes.carouselFadeMs || 1200,
+									onChange: ( carouselFadeMs ) =>
+										setAttributes( { carouselFadeMs: carouselFadeMs } ),
+									min: 400,
+									max: 4000,
+									step: 100,
+								} )
+							)
 					),
 					el(
 						PanelBody,
@@ -264,7 +359,8 @@
 					el( 'strong', null, attributes.title || __( 'Hero Banner', 'green-native-builder' ) ),
 					el( 'p', null, attributes.subtitle || __( 'Edite no painel lateral.', 'green-native-builder' ) )
 				)
-			),
+			);
+		},
 		save: dynamicSave,
 	} );
 

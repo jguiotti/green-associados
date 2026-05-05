@@ -31,7 +31,7 @@ $green_use_block_header = $green_header_post && trim( (string) $green_header_pos
 <header id="green-site-header" class="green-site-header green-section">
 	<div class="green-container green-header-inner">
 		<div class="green-header-logo">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="green-header-logo-link" aria-label="<?php esc_attr_e( 'Página inicial', 'green-core-theme' ); ?>">
+			<a href="<?php echo esc_url( function_exists( 'green_core_theme_logo_home_url' ) ? green_core_theme_logo_home_url() : home_url( '/' ) ); ?>" class="green-header-logo-link" aria-label="<?php esc_attr_e( 'Página inicial', 'green-core-theme' ); ?>">
 				<?php
 				if ( has_custom_logo() ) {
 					the_custom_logo();
