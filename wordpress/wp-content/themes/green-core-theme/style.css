@@ -4,7 +4,7 @@ Theme URI: https://greenassociados.com.br
 Author: Green Associados
 Author URI: https://greenassociados.com.br
 Description: Tema proprietário leve, headless-ready e orientado a blocos nativos.
-Version: 1.2.0
+Version: 1.2.2
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 8.1
@@ -376,13 +376,42 @@ body.green-nav-is-open {
 }
 
 .green-footer-from-page .wp-block-columns > .wp-block-column:first-child .wp-block-site-logo {
-	margin-bottom: 0;
+	margin-bottom: 0.5rem !important;
 }
 
 .green-footer-from-page .wp-block-columns > .wp-block-column:first-child .wp-block-site-logo a,
 .green-footer-from-page .wp-block-columns > .wp-block-column:first-child .wp-block-site-logo .custom-logo-link {
 	display: block;
 	line-height: 0;
+}
+
+.green-footer-from-page .green-footer-linkedin-wrap {
+	margin-top: 0.75rem;
+	line-height: 0;
+}
+
+.green-footer-from-page .green-footer-linkedin {
+	display: inline-block;
+	line-height: 0;
+	vertical-align: top;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.green-footer-from-page .green-footer-linkedin:hover,
+.green-footer-from-page .green-footer-linkedin:focus-visible {
+	opacity: 0.92;
+	transform: translateY(-1px);
+}
+
+.green-footer-from-page .green-footer-linkedin:focus-visible {
+	outline: 2px solid var(--green-secondary, #00b4d8);
+	outline-offset: 3px;
+}
+
+.green-footer-from-page .green-footer-linkedin__img {
+	display: block;
+	width: clamp(26px, 6vw, 32px);
+	height: auto;
 }
 
 .green-footer-from-page .wp-block-columns > .wp-block-column:first-child .green-footer-lead {
@@ -607,6 +636,68 @@ body.green-nav-is-open {
 		transform: none;
 		transition: none;
 	}
+}
+
+/* WhatsApp fixo (canto inferior direito). */
+.green-wa-fixed {
+	position: fixed;
+	right: clamp(14px, 3vw, 24px);
+	bottom: clamp(14px, 3vw, 24px);
+	z-index: 1001;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	border-radius: 999px;
+	background: var(--green-secondary);
+	color: #ffffff;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+	transition: transform 0.22s ease, box-shadow 0.22s ease;
+	text-decoration: none;
+}
+
+.green-wa-fixed:hover,
+.green-wa-fixed:focus-visible {
+	transform: translateY(-2px);
+	box-shadow: 0 14px 36px rgba(0, 34, 25, 0.22);
+	outline: 2px solid var(--green-secondary-fixed);
+	outline-offset: 3px;
+	color: #ffffff;
+}
+
+.green-wa-fixed__icon {
+	display: block;
+}
+
+/* Termos / Privacidade: títulos e listas mais legíveis. */
+body.green-is-legal-page .green-site-main .entry-content h1 {
+	font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+	font-weight: 700;
+	line-height: 1.25;
+	margin-bottom: 1.75rem;
+}
+
+body.green-is-legal-page .green-site-main .entry-content h2,
+body.green-is-legal-page .green-site-main .entry-content h3 {
+	font-size: clamp(1.125rem, 2vw, 1.375rem);
+	font-weight: 700;
+	margin-top: 2rem;
+	margin-bottom: 0.85rem;
+}
+
+body.green-is-legal-page .green-site-main .entry-content ol > li {
+	font-weight: 700;
+	font-size: 1.05rem;
+	line-height: 1.65;
+	margin-bottom: 0.85rem;
+}
+
+body.green-is-legal-page .green-site-main .entry-content ol > li ul,
+body.green-is-legal-page .green-site-main .entry-content ol > li ol,
+body.green-is-legal-page .green-site-main .entry-content ol > li > p {
+	font-weight: 400;
+	font-size: 1rem;
 }
 
 @media (max-width: 960px) {

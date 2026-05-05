@@ -197,6 +197,41 @@
 		}, 80 );
 	}
 
+	/**
+	 * Polylang: ao mudar idioma, mapeia a âncora (#seguranca ↔ #security) para o idioma de destino.
+	 */
+	function greenHashForHreflang( hash, hreflangRaw ) {
+		if ( ! hash || hash.length < 2 || hash.charAt( 0 ) !== '#' ) {
+			return hash;
+		}
+		var ptToEn = {
+			'#atuacao': '#areas-of-expertise',
+			'#ia': '#ai',
+			'#seguranca': '#security',
+			'#equipe': '#team',
+			'#contato': '#contact',
+		};
+		var enToPt = {
+			'#areas-of-expertise': '#atuacao',
+			'#ai': '#ia',
+			'#security': '#seguranca',
+			'#team': '#equipe',
+			'#contact': '#contato',
+		};
+		var lc = hash.toLowerCase();
+		var langRoot = '';
+		if ( hreflangRaw && typeof hreflangRaw === 'string' ) {
+			langRoot = hreflangRaw.toLowerCase().split( '-' )[ 0 ].trim();
+		}
+		if ( langRoot === 'en' ) {
+			return ptToEn[ lc ] || hash;
+		}
+		if ( langRoot === 'pt' ) {
+			return enToPt[ lc ] || hash;
+		}
+		return hash;
+	}
+
 	function initPolylangHashOnLangLinks() {
 		var links = document.querySelectorAll(
 			'.green-header-lang a.green-header-lang-link, .green-header-lang .menu a[href], .green-header-lang-list a[href]'
@@ -214,14 +249,16 @@
 				if ( ! raw || raw === '#' || raw === '#0' ) {
 					return;
 				}
+				var hreflang = a.getAttribute( 'hreflang' ) || '';
+				var mappedHash = greenHashForHreflang( h, hreflang );
 				e.preventDefault();
 				try {
 					var u = new URL( raw, window.location.href );
-					u.hash = h;
+					u.hash = mappedHash;
 					window.location.assign( u.toString() );
 				} catch ( err2 ) {
 					var clean = String( raw ).split( '#' )[ 0 ];
-					window.location.assign( clean + h );
+					window.location.assign( clean + mappedHash );
 				}
 			} );
 		} );

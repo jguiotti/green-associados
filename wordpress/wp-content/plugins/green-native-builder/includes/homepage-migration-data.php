@@ -195,7 +195,7 @@ function green_nb_get_homepage_migration_blocks() {
 				'title'      => 'SEGURANÇA',
 				'intro'      => 'A Green Associados está ciente da imensa importância de se manter a confidencialidade e a integridade das informações recebidas de seus clientes.',
 				'paragraphs' => array(
-					'Por isso, todos os nossos processos foram desenvolvidos para este fim, com destaque para a utilização de infraestrutura de firewall física e independente em nossos servidores e da ferramenta de criptografia de e-mail Microsoft Exchange Hosted Encryption® em todas as mensagens de e-mail enviadas.',
+					'Por isso, todos os nossos processos foram desenvolvidos para este fim, com destaque para a utilização de infraestrutura de firewall física e independente em nossos servidores e da ferramenta de criptografia de e-mail — Microsoft Exchange Hosted Encryption® — em todas as mensagens de e-mail enviadas.',
 					'A ferramenta utilizada em todas as traduções foi desenvolvida para garantir confidencialidade e segurança — por meio de criptografia, controles de acesso e armazenamento seguro —, atestada pela certificação SOC 2 Type II.',
 					'Além disso, toda a equipa e eventuais fornecedoras e fornecedores que possam ter acesso a informações confidenciais assinam contrato de confidencialidade com a Green Associados.',
 				),
@@ -286,7 +286,7 @@ function green_nb_get_homepage_migration_blocks() {
 				'addressLabel' => 'Endereço',
 				'address'      => "Avenida Pedroso de Morais, 631 – cj 107\nPinheiros – São Paulo/SP",
 				'whatsappText' => 'WhatsApp',
-				'whatsappUrl'  => 'https://wa.me/551138128780',
+				'whatsappUrl'  => 'https://wa.me/551152413778',
 			),
 			'innerBlocks'  => array(),
 			'innerHTML'    => '',

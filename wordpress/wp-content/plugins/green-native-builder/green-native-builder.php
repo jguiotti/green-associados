@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Green Native Builder
  * Description: Blocos Gutenberg proprietários para a Homepage da Green Associados.
- * Version: 1.2.4
+ * Version: 1.2.5
  * Author: Green Associados
  * Text Domain: green-native-builder
  *
@@ -196,7 +196,7 @@ function green_nb_print_divider_concave_top( $text_class ) {
 	$in    = trim( (string) $text_class );
 	$tc    = in_array( $in, $allow, true ) ? $in : 'text-white';
 	?>
-	<div class="green-nb-arc-concave-top pointer-events-none relative z-[1] -mt-px h-16 w-full leading-[0] md:h-28" aria-hidden="true">
+	<div class="green-nb-arc-concave-top pointer-events-none relative z-[1] -mt-px h-16 w-full text-[0] leading-none md:h-28" aria-hidden="true">
 		<svg class="<?php echo esc_attr( 'absolute -top-1 left-0 block h-full w-full ' . $tc ); ?>" preserveAspectRatio="none" viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg" focusable="false">
 			<path class="fill-current" d="<?php echo esc_attr( green_nb_arc_path_concave_q() ); ?>"/>
 		</svg>
@@ -235,27 +235,17 @@ function green_nb_render_link_button( $text, $url, $class ) {
 }
 
 /**
- * Manchas de cor (fundo) em secções claras — utilitários Tailwind (tema enfileira tailwindcss.com).
+ * Reservado: manchas de cor (blur) em secções — desativado para evitar recortes com overflow e ruído visual.
  *
- * @param string $context 'default' | 'areas' | 'contact' — desloca o blob superior para não ficar cortado pelo limite da secção.
+ * @param string $context Ignorado.
  */
 function green_nb_render_glow_marks_lite( $context = 'default' ) {
-	$top_first = 'top-0';
-	if ( 'areas' === $context ) {
-		$top_first = 'top-24 md:top-32';
-	} elseif ( 'contact' === $context ) {
-		$top_first = 'top-14 md:top-20';
-	}
-	echo '<div class="pointer-events-none absolute -z-0 left-[4%] ' . esc_attr( $top_first ) . ' h-64 w-64 -translate-x-1/3 rounded-full bg-secondary/25 blur-3xl" aria-hidden="true"></div>';
-	echo '<div class="pointer-events-none absolute -z-0 right-[2%] bottom-0 h-72 w-72 translate-y-1/4 rounded-full bg-primary/15 blur-3xl" aria-hidden="true"></div>';
 }
 
 /**
- * Brilho suave em secções escuras (ex.: IA).
+ * Reservado: brilho em secções escuras — desativado (ver `green_nb_render_glow_marks_lite`).
  */
 function green_nb_render_glow_marks_dark() {
-	echo '<div class="pointer-events-none absolute -z-0 right-[8%] top-0 h-56 w-56 rounded-full bg-white/5 blur-3xl" aria-hidden="true"></div>';
-	echo '<div class="pointer-events-none absolute -z-0 left-[5%] bottom-10 h-64 w-64 rounded-full bg-secondary/15 blur-3xl" aria-hidden="true"></div>';
 }
 
 /**
@@ -292,7 +282,7 @@ function green_nb_whatsapp_icon_svg() {
 function green_nb_blocks_asset_version( $file_rel ) {
 	$path = __DIR__ . '/' . ltrim( $file_rel, '/' );
 	$m    = is_readable( $path ) ? (int) filemtime( $path ) : 0;
-	return $m > 0 ? (string) $m : '1.2.4';
+	return $m > 0 ? (string) $m : '1.2.5';
 }
 
 function green_nb_register_assets() {
@@ -490,6 +480,7 @@ function green_nb_register_blocks() {
 		'address'      => array( 'type' => 'string', 'default' => '' ),
 		'whatsappText' => array( 'type' => 'string', 'default' => '' ),
 		'whatsappUrl'  => array( 'type' => 'string', 'default' => '' ),
+		'showWhatsapp' => array( 'type' => 'boolean', 'default' => true ),
 	);
 
 	register_block_type(
@@ -1022,7 +1013,7 @@ function green_nb_render_security_pillars( $attributes ) {
 
 	ob_start();
 	?>
-	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-security-block relative !overflow-hidden !bg-background !pb-0 !pt-8">
+	<section<?php echo $section_id ? ' id="' . esc_attr( $section_id ) . '"' : ''; ?> class="green-section green-security-block relative !overflow-hidden !bg-background !pb-0 !pt-10 md:!pt-12">
 		<?php green_nb_render_glow_marks_lite(); ?>
 		<div class="green-container green-security-grid relative z-10 !pt-2">
 			<div class="reveal !text-left">
@@ -1155,6 +1146,7 @@ function green_nb_render_contact_section( $attributes ) {
 	$address     = green_nb_sanitize_text( $attributes['address'] ?? '' );
 	$wa_text     = green_nb_sanitize_text( $attributes['whatsappText'] ?? '' );
 	$wa_url      = green_nb_sanitize_url( $attributes['whatsappUrl'] ?? '' );
+	$show_wa     = ! isset( $attributes['showWhatsapp'] ) ? true : (bool) $attributes['showWhatsapp'];
 
 	$phone_href = green_nb_phone_to_tel_href( $phone );
 	$email_href = green_nb_email_to_mailto_href( $email );
@@ -1212,18 +1204,22 @@ function green_nb_render_contact_section( $attributes ) {
 						<?php endif; ?>
 					</div>
 				</div>
-				<div class="green-contact-cta !flex !w-full !items-center !justify-start !pt-2">
+				<?php
+				$wa_label = green_nb_sanitize_text( $wa_text );
+				$wa_link  = green_nb_sanitize_url( $wa_url );
+				if ( $show_wa && '' !== $wa_label && '' !== $wa_link ) {
+					?>
+				<div class="green-contact-cta !flex !w-full min-h-[72px] !items-center !justify-center !self-center md:!justify-center !pt-2">
 					<?php
-					$wa_label = green_nb_sanitize_text( $wa_text );
-					$wa_link  = green_nb_sanitize_url( $wa_url );
-					if ( '' !== $wa_label && '' !== $wa_link ) {
-						echo '<a class="green-btn green-btn-wa !inline-flex !items-center !justify-center !gap-3 !rounded-full !border-0 !bg-secondary !px-8 !py-3 !text-[15px] !font-bold !text-white !no-underline !shadow-md !shadow-slate-900/10 transition-transform duration-200 ease-out hover:scale-105 active:scale-95" href="' . esc_url( $wa_link ) . '">';
-						echo green_nb_whatsapp_icon_svg(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						echo '<span class="green-btn-wa-label">' . esc_html( $wa_label ) . '</span>';
-						echo '</a>';
-					}
+					echo '<a class="green-btn green-btn-wa !inline-flex !items-center !justify-center !gap-3 !rounded-full !border-0 !bg-secondary !px-8 !py-3 !text-[15px] !font-bold !text-white !no-underline !shadow-md !shadow-slate-900/10 transition-transform duration-200 ease-out hover:scale-105 active:scale-95" href="' . esc_url( $wa_link ) . '">';
+					echo green_nb_whatsapp_icon_svg(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo '<span class="green-btn-wa-label">' . esc_html( $wa_label ) . '</span>';
+					echo '</a>';
 					?>
 				</div>
+					<?php
+				}
+				?>
 			</div>
 		</div>
 	</section>

@@ -25,12 +25,12 @@ $green_is_front_onepage = is_front_page() || is_page( array( 'homepage', 'Homepa
 			?>
 		</div>
 	<?php else : ?>
-		<div class="green-page-inner mx-auto w-full max-w-4xl px-8 pt-32 pb-24 text-slate-800 md:pt-40">
+		<div class="green-page-inner mx-auto w-full max-w-4xl px-8 pb-36 pt-36 text-slate-800 md:pb-44 md:pt-44">
 			<?php
 			while ( have_posts() ) {
 				the_post();
 				the_title( '<h1>', '</h1>' );
-				echo '<div class="entry-content max-w-none space-y-4 text-base leading-relaxed text-slate-800 [&_a]:text-primary [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_ul]:list-disc [&_ul]:pl-6">';
+				echo '<div class="entry-content max-w-none space-y-4 text-base leading-relaxed text-slate-800 [&_a]:text-primary [&_a:hover]:text-[#33c4e0] [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_ul]:list-disc [&_ul]:pl-6">';
 				the_content();
 				echo '</div>';
 			}

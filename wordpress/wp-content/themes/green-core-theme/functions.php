@@ -69,6 +69,103 @@ function green_core_theme_assets() {
 add_action( 'wp_enqueue_scripts', 'green_core_theme_assets' );
 
 /**
+ * Botão flutuante WhatsApp (cantos fixos configurados no CSS).
+ */
+function green_core_theme_whatsapp_fixed_button_html() {
+	$url = apply_filters( 'green_core_theme_whatsapp_sticky_url', 'https://wa.me/551152413778' );
+	$tel = sanitize_text_field( __( 'WhatsApp: (11) 5241-3778', 'green-core-theme' ) );
+	echo '<a class="green-wa-fixed" href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer" aria-label="' . esc_attr( $tel ) . '">';
+	echo '<svg class="green-wa-fixed__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+	echo '</a>';
+}
+
+function green_core_theme_output_whatsapp_fixed_button() {
+	if ( is_admin() ) {
+		return;
+	}
+	green_core_theme_whatsapp_fixed_button_html();
+}
+add_action( 'wp_footer', 'green_core_theme_output_whatsapp_fixed_button', 5 );
+
+/**
+ * Slugs reconhecidos como páginas legais (PT/EN e variantes comuns).
+ *
+ * @return string[]
+ */
+function green_core_theme_get_legal_page_slugs() {
+	return array(
+		'termos-de-uso',
+		'termos',
+		'privacidade',
+		'politica-de-privacidade',
+		'politica-de-privacidade-2',
+		'privacy-policy',
+		'terms-of-use',
+		'terms-and-conditions',
+		'terms-of-service',
+		'terms-and-conditions-of-use',
+		'privacy',
+		'terms',
+		'privacy-notice',
+		'data-privacy',
+		'data-protection',
+		'use-terms',
+		'legal',
+		'legal-notice',
+		'cookie-policy',
+		'cookies',
+	);
+}
+
+/**
+ * Página atual (qualquer idioma Polylang) é legal se o slug próprio ou o de qualquer tradução estiver na lista.
+ *
+ * @param int $post_id ID da página.
+ * @return bool
+ */
+function green_core_theme_is_legal_document_page_id( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 ) {
+		return false;
+	}
+	$legal_slugs = green_core_theme_get_legal_page_slugs();
+	$slug        = get_post_field( 'post_name', $post_id );
+	if ( is_string( $slug ) && in_array( $slug, $legal_slugs, true ) ) {
+		return true;
+	}
+	if ( function_exists( 'pll_get_post_translations' ) ) {
+		foreach ( (array) pll_get_post_translations( $post_id ) as $tid ) {
+			$tid = (int) $tid;
+			if ( $tid <= 0 ) {
+				continue;
+			}
+			$ts = get_post_field( 'post_name', $tid );
+			if ( is_string( $ts ) && in_array( $ts, $legal_slugs, true ) ) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * Legal: body class para tipografia em Termos / Privacidade (PT ou EN ligados no Polylang).
+ *
+ * @param string[] $classes Classes.
+ * @return string[]
+ */
+function green_core_theme_body_class_legal_page( $classes ) {
+	if ( ! is_page() ) {
+		return $classes;
+	}
+	if ( green_core_theme_is_legal_document_page_id( (int) get_queried_object_id() ) ) {
+		$classes[] = 'green-is-legal-page';
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'green_core_theme_body_class_legal_page' );
+
+/**
  * Garante que o CSS da 1.ª coluna do rodapé (logo + slogan) aplique depois dos estilos globais dos blocos.
  * Sem isto, regras do core / estilos globais podem carregar a seguir e anular o tema (havia «zero» efeito no browser).
  */

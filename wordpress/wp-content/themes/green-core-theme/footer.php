@@ -16,7 +16,13 @@ $green_has_footer_page = $green_footer_post && trim( (string) $green_footer_post
 	<div class="green-container green-footer-shell">
 		<?php if ( $green_has_footer_page ) : ?>
 			<div class="green-footer-from-page">
-				<?php echo apply_filters( 'the_content', $green_footer_post->post_content ); ?>
+				<?php
+				$footer_raw      = $green_footer_post->post_content;
+				$footer_prepared = function_exists( 'green_core_theme_prepare_footer_markup_for_display' )
+					? green_core_theme_prepare_footer_markup_for_display( $footer_raw )
+					: $footer_raw;
+				echo apply_filters( 'the_content', $footer_prepared ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				?>
 			</div>
 		<?php else : ?>
 			<div class="green-footer-meta">
